@@ -1,0 +1,477 @@
+<!-- Annamaria Dal Bo -->
+
+<!doctype html>
+<html>
+	<head>
+		<!--per ricaricare sempre la pagina da zero e non usare la cache-->
+		<META HTTP-EQUIV=”Pragma” CONTENT=”no-cache”>
+		<META HTTP-EQUIV=”Cache-Control” CONTENT=”no-cache”>
+		<!--
+			per definire la dimensione e posizione dell'elemento canvas;
+			se i valori di width ed height inpostati qui sono superiori a
+			corrispondenti settati in <canvas width= .. height=.. l'immagine
+			verra' adattata ingrandendola, mentre se i valori sono inferiori,
+			l'immagine verra' adattata rimpicciolendola
+		-->
+		<!-- 
+		<body>         
+		<style type="text/css">
+		canvas { border: 2px solid blue; }
+		</style>
+		</body>
+		-->
+		<style>
+			body {
+				background: #131212;
+			}
+			#gamepad-display {
+				color: green;
+				padding: 30px;
+			}
+			#my_Canvas {
+				position: relative;
+				top: 10px;
+				left: 130px;
+				margin: 10px;
+				padding: 10px;
+				background: #ffffff;
+				border: thin inset #0c0c0c;
+			}
+			.container {  /*to manage text on canvas and webgl */
+				display: block;
+				width: 0%;
+				height: 80%;
+				position: relative;
+			}
+			#uiContainer { 
+				position: absolute;
+				left: 85%;
+				top: 20%;
+			}
+			
+			.containerText {
+				position: absolute; 
+				width: 240px;
+				left: 81%; 
+				top: 90%;
+				color:white;
+			}
+
+			.containerText2 {
+				position: absolute; 
+				width: 100px;
+				padding: 10px;
+				left: 2%; 
+				top: 80%;
+				color:white;
+				font-size: 20px;
+			}
+			#ui {
+				position: relative;
+				color:white;
+				
+				
+			}
+			#text { /*to manage text on canvas and webgl */
+				background-color: transparent;  /* needed because we setcanvas bg color to white */
+				position: relative;
+				font-size: 20px;
+			}
+
+			#tex2 { /*to manage text on canvas and webgl */
+				background-color: transparent;  /* needed because we setcanvas bg color to white */
+				position: relative;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<p> </p>
+		
+		<button id = "ButtonIncreaseFOV" style = "width:100px; height: 40px; position:absolute; left: 20%; top: 10%; background-color: red; border-radius:20%;" >Increase fov</button>
+		<button id = "ButtonDecreaseFOV" style = "width:100px; height: 40px; position:absolute; left: 40%;  top: 10%; background-color: green; border-radius:20%;" >Decrease fov</button>
+		<button id = "ButtonViewRetro" style = "width:100px; height: 40px; position:absolute; left: 60%;  top: 10%; background-color:blue; border-radius:20%;" >Change camera</button>
+		
+		<!-- ******************************************************************************************** -->
+		<!-- BUTTONS FOR THE MOBILE VERSION-->
+		
+		<button id = "ButtonW" style="font-size: 50px; user-select: none; position:absolute; left: 880px; top: 200px; background-color: aquamarine;">W </button>
+		<button id = "ButtonS" style="font-size: 50px; user-select: none; position:absolute; left: 880px; top: 300px; background-color: blueviolet;">S </button>
+		<button id = "ButtonUP" style="font-size: 50px; user-select: none; position:absolute; left: 1000px; top: 200px; background-color: darkgreen;">UP </button>
+		<button id = "ButtonDOWN" style="font-size: 50px; user-select: none; position:absolute; left: 1000px; top: 300px; background-color: darkred;">DOWN </button>
+		<button id = "ButtonA" style="font-size: 50px; user-select: none; position:absolute; left: 80px; top: 200px; background-color: gold;">A </button>
+		<button id = "ButtonD" style="font-size: 50px; user-select: none; position:absolute; left: 80px; top: 300px; background-color: deeppink;">D </button>
+		<button id = "ButtonEND" style="font-size: 50px; user-select: none; position:absolute; left: 150px; top: 15px; background-color: rgb(236, 250, 36);">END</button>
+		<pre id="gamepad-display" ></pre>
+		
+		<!-- ******************************************************************************************** -->
+		<p> </p>
+		<div class="container" id="containerGame"> 
+			<canvas width="900" height="600" id="my_Canvas"></canvas>
+		</div>
+		<div id="uiContainer" width="100" height="600" > 
+			<div id="ui"> </div>
+		</div>
+		<div class="containerText" id="container_text">
+			<label id="text"></label>
+		</div>	
+		<div class="containerText2" id="container_text2">
+			<label id="text2"></label>
+		</div>	
+		<!-- ******************************************************************************************** -->
+		<!-- FS and VS for the sun light -->
+		<!-- ******************************************************************************************** -->
+		
+		<script id="sun-vs" type="not-javascript">
+		attribute vec4 a_position;
+		attribute vec2 a_texcoord;
+		attribute vec3 a_normal;
+		
+		uniform vec3 u_lightWorldPosition;
+		uniform vec3 u_viewWorldPosition;
+
+		uniform mat4 u_projection;
+		uniform mat4 u_view;
+		uniform mat4 u_world;
+		uniform mat4 u_textureMatrix;
+
+		varying vec2 v_texcoord;
+		varying vec4 v_projectedTexcoord;
+		varying vec3 v_normal;
+
+		varying vec3 v_surfaceToLight;
+		varying vec3 v_surfaceToView;
+
+		void main() {
+		  // Multiply the position by the matrix.
+		  vec4 worldPosition = u_world * a_position;
+
+		  gl_Position = u_projection * u_view * worldPosition;
+
+		  // Pass the texture coord to the fragment shader.
+		  v_texcoord = a_texcoord;
+
+		  v_projectedTexcoord = u_textureMatrix * worldPosition;
+
+		  // orient the normals and pass to the fragment shader
+		  v_normal = mat3(u_world) * a_normal;
+
+		  // compute the world position of the surface
+		  vec3 surfaceWorldPosition = (u_world * a_position).xyz;
+
+		  // compute the vector of the surface to the light
+ 		  // and pass it to the fragment shader
+  		   v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
+
+  			// compute the vector of the surface to the view/camera
+  			// and pass it to the fragment shader
+  			v_surfaceToView = u_viewWorldPosition - surfaceWorldPosition;
+		}
+		</script>
+		<script id="sun-fs" type="not-javascript">
+			precision mediump float;
+
+			// Passed in from the vertex shader.
+			varying vec2 v_texcoord;
+			varying vec4 v_projectedTexcoord;
+			varying vec3 v_normal;
+			varying vec3 v_surfaceToView;
+			varying vec3 v_surfaceToLight;
+
+			uniform vec4 u_colorMult;
+			uniform sampler2D u_texture;
+			uniform sampler2D u_projectedTexture;
+			uniform float u_bias;
+			uniform float u_shininess;
+			uniform float u_innerLimit;
+			uniform float u_outerLimit;
+			uniform float u_lightIntensity;
+			uniform float u_shadowIntensity;
+			uniform vec3 u_reverseLightDirection;
+
+			void main() {
+			  // because v_normal is a varying it's interpolated
+			  // so it will not be a unit vector. Normalizing it
+			  // will make it a unit vector again
+			  vec3 normal = normalize(v_normal);
+
+			  vec3 surfaceToLightDirection = normalize(v_surfaceToLight);
+  			  vec3 surfaceToViewDirection = normalize(v_surfaceToView);
+			  vec3 halfVector = normalize(surfaceToLightDirection + surfaceToViewDirection);
+			   
+			  float dotFromDirection = dot(surfaceToLightDirection,
+                               u_reverseLightDirection);
+			  float limitRange = u_innerLimit - u_outerLimit;
+			  float inLight = clamp((dotFromDirection - u_outerLimit) / limitRange, 0.0, 1.0);
+
+			  float light = inLight * dot(normal, surfaceToLightDirection);
+  			  float specular = inLight * pow(dot(normal, halfVector), u_shininess);
+
+			  vec3 projectedTexcoord = v_projectedTexcoord.xyz / v_projectedTexcoord.w;
+			  float currentDepth = projectedTexcoord.z + u_bias;
+
+			  bool inRange =
+				  projectedTexcoord.x >= 0.0 &&
+				  projectedTexcoord.x <= 1.0 &&
+				  projectedTexcoord.y >= 0.0 &&
+				  projectedTexcoord.y <= 1.0;
+
+			  // the 'r' channel has the depth values
+			  float projectedDepth = texture2D(u_projectedTexture, projectedTexcoord.xy).r;
+			  float shadowLight = (inRange && projectedDepth <= currentDepth) ? u_shadowIntensity : u_lightIntensity; //2.5;
+
+			  vec4 texColor = texture2D(u_texture, v_texcoord) * u_colorMult;
+			  gl_FragColor = vec4(
+      			texColor.rgb * light * shadowLight +
+      			specular * shadowLight,
+      			texColor.a);
+			}
+		</script>
+		
+		<script  id="platform-vs" type="x-shader/x-vertex">
+			attribute vec4 a_position;
+
+			uniform mat4 u_projection;
+			uniform mat4 u_view;
+			uniform mat4 u_world;
+
+			void main() {
+			  // Multiply the position by the matrices.
+			  gl_Position = u_projection * u_view * u_world * a_position;
+			}
+		</script>
+		<script  id="platform-fs" type="x-shader/x-fragment">
+			precision mediump float;
+
+			uniform vec4 u_color;
+			void main() {
+			  gl_FragColor = u_color;
+			}
+		</script>
+		
+		<!-- ******************************************************************************************** -->
+		<!-- FS and VS for the world that is not affected by the light -->
+		<!-- ******************************************************************************************** -->
+		
+		<script id="world-vs" type="not-javascript">
+			
+			attribute vec4 a_position;
+			attribute vec2 a_texcoord;
+			attribute vec3 a_normal;
+
+			uniform mat4 u_projection;
+			uniform mat4 u_view;
+			uniform mat4 u_world;
+			
+			varying vec2 v_texcoord;
+			varying vec3 v_normal;
+
+			void main(void) { //pre-built function
+				vec4 worldPosition = u_world * a_position;
+				gl_Position = u_projection * u_view * worldPosition;
+				v_normal = mat3(u_world) * a_normal;
+				v_texcoord = a_texcoord;
+			}
+		</script>
+		<script id="world-fs" type="not-javascript">
+		
+			precision mediump float;
+
+			varying vec2 v_texcoord;
+			varying vec3 v_normal;
+
+			uniform sampler2D u_texture;
+		
+			void main() {
+			  vec3 normal = normalize(v_normal);
+			  gl_FragColor = texture2D(u_texture, v_texcoord);
+			  
+			}
+		
+		</script>
+		
+		<!-- *********************************************************************************************** -->
+		<!-- LIBRARIES -->
+		<!-- *********************************************************************************************** -->
+
+		<script type="text/javascript" src="resources/webgl-utils.js"></script>
+		<script type="text/javascript" src="resources/m4.js"></script>
+		<script type="text/javascript" src="resources/glm_utils.js"></script>
+		<script type="text/javascript" src="resources/mesh_utils.js"></script>
+		<script type="text/javascript" src="resources/jquery-3.6.0.js"></script>
+		<script src="https://webglfundamentals.org/webgl/resources/webgl-lessons-ui.js"></script>
+		<script src="shipLogic.js"></script>
+		<script src="utils.js"></script>
+		<script src="renders.js"></script>
+		<script src="geometries.js"></script>
+		<script src="eventsHandlers.js"></script>
+		<script src="gameLogic.js"></script>
+		<script src="resources/load_mesh.js"></script>
+		
+		<script>
+			
+			//*****************************************************************************************************************
+			var flag=0		
+			var canvas = document.getElementById('my_Canvas');
+			var gl = canvas.getContext('webgl');
+			if (!gl) {
+				console.log("NON SUPPORTA WEBGL Context");
+			}
+			
+			//ext serve per la depth texture, se no diventa tutto nero
+			var ext = gl.getExtension('WEBGL_depth_texture');
+			if (!ext) {
+			  console.log("NON SUPPORTA WEBGL_depth_texture");  // eslint-disable-line
+			  }
+			
+			let string = "Ci troviamo in mezzo ad un campo di asteroidi: trova l'area di salvataggio,"+
+				" raggiungila e quando diventera' verde, vinci il gioco!";
+			
+			document.getElementById('text').innerHTML = string;
+
+			let string2 = "W=avanti" + "\n"+ "S=indietro"+ "\n"+ "A=sinistra"+ "\n"+ "D=destra"+"\n"
+			+ "J=alzati"+ "\n"+ "K=abbassati";
+			
+			document.getElementById('text2').innerHTML = string2;
+			
+			//*****************************************************************************************************************
+			
+			setGeometries(gl);
+			
+
+			var programInfo_sun = webglUtils.createProgramInfo(gl, ["sun-vs", "sun-fs"]);
+			var programInfo_platform = webglUtils.createProgramInfo(gl, ["platform-vs", "platform-fs"]);
+			var programInfo_world = webglUtils.createProgramInfo(gl, ["world-vs", "world-fs"]);
+			
+			setTextures();
+			createTextureForLights();
+			
+			setObjsToDraw();
+			
+			//-----------------------------------------------------------------
+			// global parameters
+			
+			// Se up = [0, 1, 0], allora PHI ruota in orizzontale, THETA ruota in verticale
+			var bias = - 0.0001;
+			
+			const settings = {
+				THETA: degToRad(86),	
+				PHI:degToRad(23), 		
+				D: 60, //40,					
+				target: [0, 0, 0], //at --> dove guardiamo
+				up:[0, 1, 0], //se cambia up, ruota l'intero SDR, quindi cambiano gli assi
+				aspect: gl.canvas.clientWidth / gl.canvas.clientHeight,
+				zmin: 1,	// faccia più piccola del frustum znear
+				zmax: 100,	// faccia più grande del frustum zfar
+				fov: degToRad(60), 	// aumentando questo, aumento l'ampiezza della visuale (tipo grandangolo)
+				x_light: 100, 
+				y_light: 400,
+				z_light: 10, 
+				x_targetlight: 0,	
+				y_targetlight: 0,	
+				z_targetlight: 0, 				
+				width_projLight: 30,
+				height_projLight: 30,
+				fovLight: 500,
+				lightIntensity: 2.5,
+				shadowIntensity: 0.5,
+				shininess: 150,
+			};
+
+			// ----------------------------------------------------------------
+			// sliders 
+			if( !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) ) {
+				webglLessonsUI.setupUI(document.querySelector('#ui'), settings, [
+					{ type: 'slider',   key: 'x_light',  	min: -200, 	max: 200, 	change: render(), precision: 2, step: 0.001,  },
+					{ type: 'slider',   key: 'y_light',  	min: 300, 	max: 500, 	change: render(), precision: 2, step: 0.001, },
+					{ type: 'slider',   key: 'z_light',  	min: -200, 	max: 200, 	change: render(), precision: 2, step: 0.001, },
+					{ type: 'slider',   key: 'D',  			min: -100, 	max: 500, 	change: render(), precision: 2, step: 0.001, },
+					{ type: 'slider',   key: 'lightIntensity',  min: 0, 	max: 4, 	change: render(), precision: 2, step: 0.001, },
+					{ type: 'slider',   key: 'shadowIntensity',  min: 0, 	max: 2.5, 	change: render(), precision: 2, step: 0.001, },
+					{ type: 'slider',   key: 'shininess',  min: 50, 	max: 250, 	change: render(), precision: 2, step: 0.001, },
+				]);
+				
+				document.getElementById("ButtonA").style.visibility = "hidden";
+				document.getElementById("ButtonW").style.visibility = "hidden";
+				document.getElementById("ButtonS").style.visibility = "hidden";
+				document.getElementById("ButtonD").style.visibility = "hidden";
+				document.getElementById("ButtonEND").style.visibility = "hidden";
+				document.getElementById("ButtonUP").style.visibility = "hidden";
+				document.getElementById("ButtonDOWN").style.visibility = "hidden";
+				
+				if (screen.width === 1920 && screen.height ===1080)
+					document.getElementById("my_Canvas").style.width = "1400px";
+					
+			}
+			else { //i'm in the mobile version
+				document.getElementById("my_Canvas").style.height = "320px";
+				document.getElementById("my_Canvas").style.width = "680px";
+				document.getElementById("my_Canvas").style.left = "150px";
+				document.getElementById("my_Canvas").style.top = "80px";
+				document.getElementById("container_text").style.top = "15px";
+				document.getElementById("container_text").style.left = "450px";
+				document.getElementById("container_text").style.width = "500px";
+				
+				document.getElementById("ButtonIncreaseFOV").style.visibility = "hidden";
+				document.getElementById("ButtonDecreaseFOV").style.visibility = "hidden";
+				document.getElementById("ButtonViewRetro").style.visibility = "hidden";
+				bias = -0.005; //su mobile lo metto diverso, se no viene tutto nero
+			}
+
+			// -----------------------------------------------------------------
+			// actions for mouse, keyboard and mobile
+			var drag;
+			
+			document.getElementById("ButtonIncreaseFOV").onclick = function(){settings.fov  *= 1.1;};
+			document.getElementById("ButtonDecreaseFOV").onclick = function(){settings.fov *= 0.9;};
+			document.getElementById("ButtonViewRetro").onclick = function(){cambiaCamera = !cambiaCamera};
+
+			var pressed;
+			document.getElementById("ButtonW").onclick = function(){pressed = "ButtonW"};
+			document.getElementById("ButtonA").onclick = function(){pressed = "ButtonA"};
+			document.getElementById("ButtonD").onclick = function(){pressed = "ButtonD"};
+			document.getElementById("ButtonS").onclick = function(){pressed = "ButtonS"};
+			document.getElementById("ButtonUP").onclick = function(){pressed = "ButtonUP"};
+			document.getElementById("ButtonDOWN").onclick = function(){pressed = "ButtonDOWN"};
+			document.getElementById("ButtonEND").onclick = function(){key[4]=true; pressed = "ButtonEND"};
+
+			canvas.onmousedown = mouseDown;
+			canvas.onmouseup = mouseUp;
+			canvas.mouseout = mouseUp;
+			canvas.onmousemove = mouseMove;
+			window.addEventListener('keydown', doKeyDown, true);
+			window.addEventListener('keyup', doKeyUp, true);
+			window.addEventListener('touchstart', doTouchstart, true);
+			window.addEventListener('touchend', doTouchend, true);
+			window.addEventListener("gamepadconnected", function(e) {
+  				const gp = navigator.getGamepads()[e.gamepad.index];
+  				console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
+    			gp.index, gp.id,
+    			gp.buttons.length, gp.axes.length);
+				console.log(e.gamepad);
+				
+			});
+			window.addEventListener("gamepaddisconnected", function(e) {
+  				console.log("Gamepad disconnected from index %d: %s",
+    			e.gamepad.index, e.gamepad.id);
+				flag=0;
+			});
+			
+			
+			//*****************************************************************************************************************
+			// DRAWING
+			
+			var doneSomething=false; 
+			var nstep=0; 
+			var timeNow=0;
+
+			const PHYS_SAMPLING_STEP=20; 	// numero di millisec che un passo di fisica simula
+			
+			ShipInit(); 
+			areaInit();
+			update(); // start animation
+			window.requestAnimationFrame(update);
+
+		</script>
+	</body>
+</html>  
