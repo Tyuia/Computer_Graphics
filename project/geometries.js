@@ -26,7 +26,7 @@ function setObjsToDraw() {
 		},
 		{
 			name: "asteroid3",
-			bufferInfo: bufferInfo_asteroid2,
+			bufferInfo: bufferInfo_asteroid,
 			uniforms: {
 				u_colorMult: [0.5, 0.5, 0, 1],
 				u_texture: textures[5],
@@ -35,7 +35,7 @@ function setObjsToDraw() {
 		},
 		{
 			name: "asteroid4",
-			bufferInfo: bufferInfo_asteroid3,
+			bufferInfo: bufferInfo_asteroid,
 			uniforms: {
 				u_colorMult: [1, 0.5, 1, 1],
 				u_texture: textures[3],
@@ -44,7 +44,7 @@ function setObjsToDraw() {
 		},
 		{
 			name: "asteroid5",
-			bufferInfo: bufferInfo_asteroid3,
+			bufferInfo: bufferInfo_asteroid,
 			uniforms: {
 				u_colorMult: [1, 1, 1, 1],
 				u_texture: textures[8],
@@ -62,15 +62,6 @@ function setObjsToDraw() {
 			},
 		},
 
-		{
-			name: "boss",
-			bufferInfo: bufferInfo_boss,
-			uniforms: {
-				u_colorMult: [0.5, 0.5, 0.5, 1],
-				u_texture: textures[1],
-				u_world: m4.scale(m4.translation(70, 20, 50), 5, 5, 5),
-			},
-		},
 	
 		{
 			//not affected by the light
@@ -227,39 +218,6 @@ function setGeometries(gl) {
 	};
 
 	bufferInfo_asteroid = webglUtils.createBufferInfoFromArrays(gl, arrays_asteroid);
-
-	
-	loadDoc('resources/data/asteroid.obj');
-
-	const arrays_asteroid2 = {
-	   position:	{ numComponents: 3, data:webglVertexData[0], },
-	   texcoord:	{ numComponents: 2, data:webglVertexData[1], },
-	   normal:		{ numComponents: 3, data:webglVertexData[2], },
-	};
-
-	bufferInfo_asteroid2 = webglUtils.createBufferInfoFromArrays(gl, arrays_asteroid2);
-
-	
-
-	loadDoc('resources/data/asteroid.obj');
-
-	const arrays_asteroid3 = {
-	   position:	{ numComponents: 3, data:webglVertexData[0], },
-	   texcoord:	{ numComponents: 2, data:webglVertexData[1], },
-	   normal:		{ numComponents: 3, data:webglVertexData[2], },
-	};
-
-	bufferInfo_asteroid3 = webglUtils.createBufferInfoFromArrays(gl, arrays_asteroid3);
-
-	loadDoc('resources/data/boss.obj');
-
-	const arrays_boss = {
-	   position:	{ numComponents: 3, data:webglVertexData[0], },
-	   texcoord:	{ numComponents: 2, data:webglVertexData[1], },
-	   normal:		{ numComponents: 3, data:webglVertexData[2], },
-	};
-
-	bufferInfo_boss = webglUtils.createBufferInfoFromArrays(gl, arrays_boss);
 
 
 

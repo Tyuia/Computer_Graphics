@@ -264,7 +264,7 @@ function drawAsteroids(programInfo) {
 	if(objToDraw1.uniforms.u_world[14]<-300)
 		flag1 = false;
 	webglUtils.drawBufferInfo(gl, objToDraw1.bufferInfo);
-	/*
+	
 	var objToDraw2 = getObjToDraw(objectsToDraw, "asteroid2");
 	webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw2.bufferInfo);
 	webglUtils.setUniforms(programInfo, objToDraw2.uniforms);
@@ -338,20 +338,7 @@ function drawAsteroids(programInfo) {
 	}
 	if(objToDraw6.uniforms.u_world[12]<-300)
 		flag6 = false;
-	webglUtils.drawBufferInfo(gl, objToDraw6.bufferInfo);*/
-
-	var objToDraw7 = getObjToDraw(objectsToDraw, "boss");
-	webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw7.bufferInfo);
-	webglUtils.setUniforms(programInfo, objToDraw7.uniforms);
-	if (flag7 == false)
-		objToDraw7.uniforms.u_world[12] += 0.8;
-	if(objToDraw7.uniforms.u_world[12]>300)
-		flag7 = true;
-	if(flag7 == true)
-		objToDraw7.uniforms.u_world[12] -= 0.8
-	if(objToDraw7.uniforms.u_world[12]<-300)
-		flag7 = false;
-	webglUtils.drawBufferInfo(gl, objToDraw7.bufferInfo);
+	webglUtils.drawBufferInfo(gl, objToDraw6.bufferInfo);
 	
 }
 
