@@ -71,7 +71,7 @@ function setObjsToDraw() {
 			uniforms: {
 				u_colorMult: [0.5, 0.5, 0.5, 1],
 				u_texture: textures[1],
-				u_world: m4.scale(m4.translation(20, 100, 20), 5, 7, 5),
+				u_world: m4.scale(m4.translation(20, -100, 20), 5, 7, 5),
 			},
 		},
 

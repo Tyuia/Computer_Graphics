@@ -27,9 +27,12 @@ function ENDGame() {
 		var c_b_t=[c_b[0]+objectsToDraw[i].uniforms.u_world[12], c_m[1]+objectsToDraw[i].uniforms.u_world[13],c_m[2]+objectsToDraw[i].uniforms.u_world[14]];
 		if(Math.sqrt(Math.pow((c_m_t[0]-c_b_t[0]),2)+Math.pow((c_m_t[1]-c_b_t[1]),2)+Math.pow((c_m_t[2]-c_b_t[2]),2)) < 40){
 			let string; 
-			string = "Hai perso!";
+			string = "HAI PERSO!";
 			document.getElementById('text').innerHTML = string;
-			alert("GAME OVER!");
+			setTimeout(function(){
+				window.location.reload(1);
+			}, 1000);
+			//alert("GAME OVER!");
 		}
 		}
 		for(i=0;i<l;i++){
@@ -48,9 +51,12 @@ function ENDGame() {
 			}
 			else {
 				let string; 
-				string = "Hai perso!";
+				string = "HAI PERSO!";
 				document.getElementById('text').innerHTML = string;
-				alert("GAME OVER!");
+				setTimeout(function(){
+					window.location.reload(1);
+				}, 1000);
+				//alert("GAME OVER!");
 				}
 			}
 		}

@@ -95,13 +95,14 @@
 		<!-- ******************************************************************************************** -->
 		<!-- BUTTONS FOR THE MOBILE VERSION-->
 		
-		<button id = "ButtonW" style="font-size: 50px; user-select: none; position:absolute; left: 880px; top: 200px; background-color: aquamarine;">W </button>
-		<button id = "ButtonS" style="font-size: 50px; user-select: none; position:absolute; left: 880px; top: 300px; background-color: blueviolet;">S </button>
-		<button id = "ButtonUP" style="font-size: 50px; user-select: none; position:absolute; left: 1000px; top: 200px; background-color: darkgreen;">UP </button>
-		<button id = "ButtonDOWN" style="font-size: 50px; user-select: none; position:absolute; left: 1000px; top: 300px; background-color: darkred;">DOWN </button>
-		<button id = "ButtonA" style="font-size: 50px; user-select: none; position:absolute; left: 80px; top: 200px; background-color: gold;">A </button>
-		<button id = "ButtonD" style="font-size: 50px; user-select: none; position:absolute; left: 80px; top: 300px; background-color: deeppink;">D </button>
+		<button id = "ButtonW" style="font-size: 50px; user-select: none; position:absolute; left: 120px; top: 230px; background-color: aquamarine;">W </button>
+		<button id = "ButtonS" style="font-size: 50px; user-select: none; position:absolute; left: 125px; top: 430px; background-color: blueviolet;">S </button>
+		<button id = "ButtonUP" style="font-size: 50px; user-select: none; position:absolute; left: 800px; top: 200px; background-color: darkgreen;">UP </button>
+		<button id = "ButtonDOWN" style="font-size: 50px; user-select: none; position:absolute; left: 800px; top: 300px; background-color: darkred;">DOWN </button>
+		<button id = "ButtonA" style="font-size: 50px; user-select: none; position:absolute; left: 60px; top: 330px; background-color: gold;">A </button>
+		<button id = "ButtonD" style="font-size: 50px; user-select: none; position:absolute; left: 200px; top: 330px; background-color: deeppink;">D </button>
 		<button id = "ButtonEND" style="font-size: 50px; user-select: none; position:absolute; left: 150px; top: 15px; background-color: rgb(236, 250, 36);">END</button>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" >
 		<pre id="gamepad-display" ></pre>
 		
 		<!-- ******************************************************************************************** -->
@@ -330,7 +331,7 @@
 			document.getElementById('text').innerHTML = string;
 
 			let string2 = "W=avanti" + "\n"+ "S=indietro"+ "\n"+ "A=sinistra"+ "\n"+ "D=destra"+"\n"
-			+ "J=alzati"+ "\n"+ "K=abbassati";
+			+ "J=alzati"+ "\n"+ "K=abbassati" + "\n"+"SPAZIO=fine gioco";
 			
 			document.getElementById('text2').innerHTML = string2;
 			
@@ -403,23 +404,23 @@
 				document.getElementById("ButtonUP").style.visibility = "hidden";
 				document.getElementById("ButtonDOWN").style.visibility = "hidden";
 				
-				if (screen.width === 1920 && screen.height ===1080)
-					document.getElementById("my_Canvas").style.width = "1400px";
 					
 			}
 			else { //i'm in the mobile version
-				document.getElementById("my_Canvas").style.height = "320px";
-				document.getElementById("my_Canvas").style.width = "680px";
-				document.getElementById("my_Canvas").style.left = "150px";
+				document.getElementById("my_Canvas").style.height = "250px";
+				document.getElementById("my_Canvas").style.width = "500px";
+				document.getElementById("my_Canvas").style.left = "250px";
 				document.getElementById("my_Canvas").style.top = "80px";
 				document.getElementById("container_text").style.top = "15px";
 				document.getElementById("container_text").style.left = "450px";
 				document.getElementById("container_text").style.width = "500px";
+				document.getElementById("container_text2").style.top = "35px";
+				document.getElementById("container_text2").style.width = "100px";
 				
 				document.getElementById("ButtonIncreaseFOV").style.visibility = "hidden";
 				document.getElementById("ButtonDecreaseFOV").style.visibility = "hidden";
 				document.getElementById("ButtonViewRetro").style.visibility = "hidden";
-				bias = -0.005; //su mobile lo metto diverso, se no viene tutto nero
+				bias = -0.01 //su mobile lo metto diverso, se no viene tutto nero
 			}
 
 			// -----------------------------------------------------------------
