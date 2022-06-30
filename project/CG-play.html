@@ -336,7 +336,10 @@
 			
 			//*****************************************************************************************************************
 			
-			setGeometries(gl);
+			let{xc,yc,zc,xc2,yc2,zc2,xc3,yc3,zc3}=setGeometries(gl);
+			var c_a=[xc,yc,zc];
+			var c_m=[xc2,yc2,zc2];
+			var c_b=[xc3,yc3,zc3];
 			
 
 			var programInfo_sun = webglUtils.createProgramInfo(gl, ["sun-vs", "sun-fs"]);
@@ -347,6 +350,7 @@
 			createTextureForLights();
 			
 			setObjsToDraw();
+			
 			
 			//-----------------------------------------------------------------
 			// global parameters

@@ -1,7 +1,10 @@
 //Annamaria Dal Bo
 
 var objectsToDraw = [];
-var mesh = new Array();
+var positions = [];
+var positions2=[];
+var positions3=[];
+
 
 function setObjsToDraw() {
 	objectsToDraw = [
@@ -30,7 +33,7 @@ function setObjsToDraw() {
 			uniforms: {
 				u_colorMult: [0.5, 0.5, 0, 1],
 				u_texture: textures[5],
-				u_world: m4.scale(m4.translation(-200, 0, 0), 1, 1, 1),
+				u_world: m4.scale(m4.translation(-200, 0, 0), 3, 2, 3),
 			},
 		},
 		{
@@ -48,7 +51,7 @@ function setObjsToDraw() {
 			uniforms: {
 				u_colorMult: [1, 1, 1, 1],
 				u_texture: textures[8],
-				u_world: m4.scale(m4.translation(300, 0, 0), 3, 3, 3),
+				u_world: m4.scale(m4.translation(300, 0, 0), 3, 6, 3),
 			},
 		},
 		
@@ -58,7 +61,47 @@ function setObjsToDraw() {
 			uniforms: {
 				u_colorMult: [0.5, 0.5, 0.5, 1],
 				u_texture: textures[0],
-				u_world: m4.scale(m4.translation(20, 20, 20), 2, 2, 2),
+				u_world: m4.scale(m4.translation(20, 20, 20), 2, 2, 5),
+			},
+		},
+
+		{
+			name: "boss1",
+			bufferInfo: bufferInfo_boss,
+			uniforms: {
+				u_colorMult: [0.5, 0.5, 0.5, 1],
+				u_texture: textures[1],
+				u_world: m4.scale(m4.translation(20, 100, 20), 5, 7, 5),
+			},
+		},
+
+		{
+			name: "boss2",
+			bufferInfo: bufferInfo_boss,
+			uniforms: {
+				u_colorMult: [0.5, 0.5, 0.5, 1],
+				u_texture: textures[1],
+				u_world: m4.scale(m4.translation(0, -100, 20), 5, 2, 5),
+			},
+		},
+
+		{
+			name: "boss3",
+			bufferInfo: bufferInfo_boss,
+			uniforms: {
+				u_colorMult: [0.5, 0.5, 0.5, 1],
+				u_texture: textures[1],
+				u_world: m4.scale(m4.translation(250, -250, 300), 8, 8, 8),
+			},
+		},
+
+		{
+			name: "boss4",
+			bufferInfo: bufferInfo_boss,
+			uniforms: {
+				u_colorMult: [0.5, 0.5, 0.5, 1],
+				u_texture: textures[1],
+				u_world: m4.scale(m4.translation(250, 200, 20), 5, 5, 5),
 			},
 		},
 
@@ -112,8 +155,8 @@ function setObjsToDraw() {
 // ****************************************************************************************************************
 
 var bufferInfo_axis, bufferInfo_cubecoloured, bufferInfo_cubewire, bufferInfo_floor;
-var bufferInfo_asteroid, bufferInfo_asteroid2, bufferInfo_asteroid3, bufferInfo_obj, 
-	bufferInfo_obj_wheel, bufferInfo_obj_mf, cubeLinesBufferInfo, bufferInfo_boss;
+var bufferInfo_asteroid, bufferInfo_obj, 
+	bufferInfo_boss, bufferInfo_obj_mf, cubeLinesBufferInfo, bufferInfo_boss;
 
 function setGeometries(gl) {
 
@@ -216,8 +259,112 @@ function setGeometries(gl) {
 	   texcoord:	{ numComponents: 2, data:webglVertexData[1], },
 	   normal:		{ numComponents: 3, data:webglVertexData[2], },
 	};
+	positions = Array.from(webglVertexData[0]);
+	var xmax=0;
+	var xmin=0;
+	for(i=0;i<positions.length;i=i+3){
+		if(xmax<positions[i]){
+			xmax=positions[i];
+			var j=i;
+		}
+		if(xmin>positions[i]){
+			xmin=positions[i];
+			var k=i;
+		}
+	}
+	var p1=[xmin,positions[k+1], positions[k+2]];
+	var p2=[xmax,positions[j+1],positions[j+2]];
+	var ymax=0;
+	var ymin=0;
+	for(i=1;i<positions.length;i=i+3){
+		if(ymax<positions[i]){
+			ymax=positions[i];
+			var j=i;
+		}
+		if(ymin>positions[i]){
+			ymin=positions[i];
+			var k=i;
+		}
+	}
+	var p3=[positions[j-1],ymax,positions[j+1]];
+	var p4=[positions[k-1],ymin,positions[k+1]];
+	
+	var zmax=0;
+	var zmin=0;
+	for(i=2;i<positions.length;i=i+3){
+		if(zmax<positions[i]){
+			zmax=positions[i];
+			var j=i;
+		}
+		if(zmin>positions[i]){
+			zmin=positions[i];
+			var k=i;
+		}
+	}
+	var p5=[positions[j-2],positions[j-1],zmax];
+	var p6=[positions[k-2],positions[k-1],zmin];
+	var xc=(p1[0]+p2[0]+p3[0]+p4[0]+p5[0]+p6[0])/6;
+	var yc=(p1[1]+p2[1]+p3[1]+p4[1]+p5[1]+p6[1])/6;
+	var zc=(p1[2]+p2[2]+p3[2]+p4[2]+p5[2]+p6[2])/6;
 
 	bufferInfo_asteroid = webglUtils.createBufferInfoFromArrays(gl, arrays_asteroid);
+
+	loadDoc('resources/data/boss.obj')
+
+	const arrays_boss= {
+	   position:	{ numComponents: 3, data:webglVertexData[0], },
+	   texcoord:	{ numComponents: 2, data:webglVertexData[1], },
+	   normal:		{ numComponents: 3, data:webglVertexData[2], },
+	};
+	positions3 = Array.from(webglVertexData[0]);
+	var xmax=0;
+	var xmin=0;
+	for(i=0;i<positions3.length;i=i+3){
+		if(xmax<positions3[i]){
+			xmax=positions3[i];
+			var j=i;
+		}
+		if(xmin>positions3[i]){
+			xmin=positions3[i];
+			var k=i;
+		}
+	}
+	var p1=[xmin,positions3[k+1], positions3[k+2]];
+	var p2=[xmax,positions3[j+1],positions3[j+2]];
+	var ymax=0;
+	var ymin=0;
+	for(i=1;i<positions3.length;i=i+3){
+		if(ymax<positions3[i]){
+			ymax=positions3[i];
+			var j=i;
+		}
+		if(ymin>positions3[i]){
+			ymin=positions3[i];
+			var k=i;
+		}
+	}
+	var p3=[positions3[j-1],ymax,positions3[j+1]];
+	var p4=[positions3[k-1],ymin,positions3[k+1]];
+	
+	var zmax=0;
+	var zmin=0;
+	for(i=2;i<positions3.length;i=i+3){
+		if(zmax<positions3[i]){
+			zmax=positions3[i];
+			var j=i;
+		}
+		if(zmin>positions3[i]){
+			zmin=positions3[i];
+			var k=i;
+		}
+	}
+	var p5=[positions[j-2],positions[j-1],zmax];
+	var p6=[positions[k-2],positions[k-1],zmin];
+	var xc3=(p1[0]+p2[0]+p3[0]+p4[0]+p5[0]+p6[0])/6;
+	var yc3=(p1[1]+p2[1]+p3[1]+p4[1]+p5[1]+p6[1])/6;
+	var zc3=(p1[2]+p2[2]+p3[2]+p4[2]+p5[2]+p6[2])/6;
+
+	bufferInfo_boss = webglUtils.createBufferInfoFromArrays(gl, arrays_boss);
 
 
 
@@ -228,8 +375,8 @@ function setGeometries(gl) {
 	   texcoord:	{ numComponents: 2, data:webglVertexData[1], },
 	   normal:		{ numComponents: 3, data:webglVertexData[2], },
 	};
-
 	bufferInfo_obj = webglUtils.createBufferInfoFromArrays(gl, arrays_obj);
+	
 
 
 	
@@ -240,8 +387,60 @@ function setGeometries(gl) {
 	   texcoord:	{ numComponents: 2, data:webglVertexData[1], },
 	   normal:		{ numComponents: 3, data:webglVertexData[2], },
 	};
+	positions2 = Array.from(webglVertexData[0]);
+	var xmax=0;
+	var xmin=0;
+	for(i=0;i<positions2.length;i=i+3){
+		if(xmax<positions2[i]){
+			xmax=positions2[i];
+			var j=i;
+		}
+		if(xmin>positions2[i]){
+			xmin=positions2[i];
+			var k=i;
+		}
+	}
+	var p1=[xmin,positions2[k+1], positions2[k+2]];
+	var p2=[xmax,positions2[j+1],positions2[j+2]];
+	var ymax=0;
+	var ymin=0;
+	for(i=1;i<positions2.length;i=i+3){
+		if(ymax<positions2[i]){
+			ymax=positions2[i];
+			var j=i;
+		}
+		if(ymin>positions2[i]){
+			ymin=positions2[i];
+			var k=i;
+		}
+	}
+	var p3=[positions2[j-1],ymax,positions2[j+1]];
+	var p4=[positions2[k-1],ymin,positions2[k+1]];
+	
+	var zmax=0;
+	var zmin=0;
+	for(i=2;i<positions2.length;i=i+3){
+		if(zmax<positions2[i]){
+			zmax=positions2[i];
+			var j=i;
+		}
+		if(zmin>positions2[i]){
+			zmin=positions2[i];
+			var k=i;
+		}
+	}
+	var p5=[positions2[j-2],positions2[j-1],zmax];
+	var p6=[positions2[k-2],positions2[k-1],zmin];
+	var xc2=(p1[0]+p2[0]+p3[0]+p4[0]+p5[0]+p6[0])/6;
+	var yc2=(p1[1]+p2[1]+p3[1]+p4[1]+p5[1]+p6[1])/6;
+	var zc2=(p1[2]+p2[2]+p3[2]+p4[2]+p5[2]+p6[2])/6;
+
 
 	bufferInfo_obj_mf = webglUtils.createBufferInfoFromArrays(gl, arrays_obj_mf);
+	return{xc,yc,zc,xc2,yc2,zc2,xc3,yc3,zc3};
 	
 	
 }
+
+
+
