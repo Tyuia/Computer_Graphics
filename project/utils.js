@@ -4,7 +4,7 @@
 //MATH functions
 //*********************************************************************************************************************
 
-//returns a random integer between min and max both included
+//ritorna un numero random
 function getRndInteger(min, max) {
   return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
@@ -23,7 +23,7 @@ function isPowerOf2(value) {
 
 
 //*********************************************************************************************************************
-// TEXTURE HANDLERS
+// GESTIONE TEXTURE
 //*********************************************************************************************************************
 
 var textures = [];
@@ -40,8 +40,8 @@ function setTextures() {
 	textures[6] = textureFromImage("resources/images/box.jpg");	
 	textures[7] = textureFromImage("resources/images/superficie.jpg");
 	textures[8] = textureFromImage("resources/images/asteroid4.jpg");
+	textures[9] = textureFromImage("resources/images/tie_sphere.jpeg");
 }
-
 
 var depthFramebuffer, depthTextureSize, depthTexture;
 
@@ -55,17 +55,14 @@ function textureFromImage(fileName){
 	var image = new Image();
 	//image.src = "resources/images/mappa.jpg";
 	image.src = fileName;
-	
 	image.addEventListener('load', function() {
 		// Now that the image has loaded, copy it to the texture
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-
 		checkIfMipmap(image);
 	});
 	return texture;
 }
-
 function checkIfMipmap(image) {
 	// Check if the image is a power of 2 in both dimensions
 	if (isPowerOf2(image.width) && isPowerOf2(image.height)) { // Yes, it's a power of 2 --> Generate mips
@@ -77,14 +74,10 @@ function checkIfMipmap(image) {
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 	}
-
 }
-
+// --------------------------------------------------
+//DEPTH TEXTURE
 function createTextureForLights(){
-	
-	// --------------------------------------------------
-	//DEPTH TEXTURE
-	
 	depthTexture = gl.createTexture();
 	depthTextureSize = 512;
 	gl.bindTexture(gl.TEXTURE_2D, depthTexture);
@@ -97,7 +90,7 @@ function createTextureForLights(){
 		0,                  // border
 		gl.DEPTH_COMPONENT, // format
 		gl.UNSIGNED_INT,    // type
-		null);              // data
+	null);              // data
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
@@ -110,29 +103,30 @@ function createTextureForLights(){
 		gl.DEPTH_ATTACHMENT,  // attachment point
 		gl.TEXTURE_2D,        // texture target
 		depthTexture,         // texture
-		0);                   // mip level
+	0);                   // mip level
 		
 }
-
-var input;
-var input2;
+//*********************************************************************************************************************
+// GESTIONE CARICAMENTO DEI FILE
+//*********************************************************************************************************************
+var input; //file per obj
+var input2; // file per texture
 function gc_openFile(event) {
 	event.preventDefault();
     input = event.target;
 	setGeometries(gl);
 	setObjsToDraw();
-	}
-
+}
 function gc_openFile2(event) {
 	event.preventDefault();
 	input = event.target;
 	setTextures();
 	setObjsToDraw();
-	}
+}
 
 
 //*********************************************************************************************************************
-// MESH.OBJ HANDLERS
+// GESTIONE DELLE MESH
 //*********************************************************************************************************************
 
 
@@ -140,7 +134,6 @@ function getObjToDraw(objsToDraw, name){
 
 	return objsToDraw.find(x => x.name === name);
 }
-
 function loadDoc(url) {
 	var xhttp = new XMLHttpRequest();
 
@@ -153,28 +146,22 @@ function loadDoc(url) {
 	xhttp.open("GET", url, false);
 	xhttp.send(null);
 }
-
 function parseOBJ(text) {
-
 	webglVertexData = [
 	    [],   // positions
 	    [],   // texcoords
 	    [],   // normals
 	];
-	
 	const objPositions = [[0, 0, 0]];
   	const objTexcoords = [[0, 0]];
   	const objNormals = [[0, 0, 0]];
- 
 	const objVertexData = [
 	    objPositions,
 	    objTexcoords,
 	    objNormals,
-	  ];
-
-	  // same order as `f` indices
-
-	  //f 1/2/3 -> 1 2 3
+    ];
+	// same order as `f` indices
+	//f 1/2/3 -> 1 2 3
 	function addVertex(vert) {
 		const ptn = vert.split('/');
 		ptn.forEach((objIndexStr, i) => {
@@ -208,8 +195,7 @@ function parseOBJ(text) {
 	        addVertex(parts[tri + 2]);
 	      }
 	    },
-	  };
-
+	};
 	//	\w* = almeno una lettere o un numero
 	// ?:x = meccia gli spazi singoli bianchi (anche più di uno)
 	// . = classi di caratteri, meccia ogni singolo carattere tranne i terminatori di linea
@@ -236,9 +222,7 @@ function parseOBJ(text) {
 	  //console.warn('unhandled keyword:', keyword, 'at line', lineNo + 1);
 	  continue;
 	}
-
 	handler(parts, unparsedArgs); //gestisce gli argomenti che non hai gestito
 	}
-
 }
 

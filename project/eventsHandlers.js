@@ -1,7 +1,7 @@
 //Annamaria Dal Bo
 
 //*****************************************************************************************************************
-// MOUSE EVENTS
+// EVENTI MOUSE
 //*****************************************************************************************************************
 
 var mouseDown=function(e) {
@@ -21,7 +21,6 @@ var mouseMove=function(e) {
 	if (!drag) return false; 
 	dX=-(e.pageX-old_x)*2*Math.PI/canvas.width; 
 	dY=-(e.pageY-old_y)*2*Math.PI/canvas.height; 
-	
 	settings.THETA+=dX;
 	settings.PHI+=dY;
 	old_x=e.pageX, old_y=e.pageY; 
@@ -30,38 +29,40 @@ var mouseMove=function(e) {
 };
 
 //*****************************************************************************************************************
-// KEYBOARD EVENTS
+// EVENTI TASTIERA
 //*****************************************************************************************************************
-var WJ=0;
-var WJ2=0;
+var WJ=0; //serve per ruotare avanti e indietro
+var WJ2=0; // serve per ruotare a destra e sinistra
 function doKeyDown(e){
-	if (e.keyCode == 87){
-		key[0]=true; 	// THE W KEY
+	if (e.keyCode == 87){ // THE W KEY
+		key[0]=true; 	
 	} 
-	if (e.keyCode == 83){
-		key[2]=true; 	// THE S KEY
+	if (e.keyCode == 83){ // THE S KEY
+		key[2]=true; 	
 	} 
-	if (e.keyCode == 65){
-		key[1]=true; 	// THE A KEY	
+	if (e.keyCode == 65){ // THE A KEY
+		key[1]=true; 		
 		WJ2=2;
 	} 
-	if (e.keyCode == 68){
-		key[3]=true; 	// THE D KEY
+	if (e.keyCode == 68){ // THE D KEY
+		key[3]=true; 	
 		WJ2=-2;
 	} 
-	if (e.keyCode == 32){
-		key[4]=true; 	// THE BAR SPACE	
+	if (e.keyCode == 32){ // THE BAR SPACE
+		key[4]=true; 		
 	} 
-	if (e.keyCode == 74){
-		key[5]=true; 	// THE J KEY	
+	if (e.keyCode == 74){ // THE J KEY
+		key[5]=true; 		
 	} 
-	if (e.keyCode == 75){
-		key[6]=true; // THE K KEY
+	if (e.keyCode == 75){ // THE K KEY
+		key[6]=true; 
 	}		
-	if(key[0]==true && key[5]==true)
+	if(key[0]==true && key[5]==true){
 		WJ=1;
-	if(key[0]==true && key[6]==true)
+	}
+	if(key[0]==true && key[6]==true){
 		WJ=-1;
+	}
 }
 
 function doKeyUp(e){
@@ -71,21 +72,23 @@ function doKeyUp(e){
 			WJ=0;
 		}
 	} 
-	if (e.keyCode == 83){
-		key[2]=false; 	// THE S KEY	
+	if (e.keyCode == 83){ // THE S KEY
+		key[2]=false; 		
 	} 
-	if (e.keyCode == 65){
-		key[1]=false; 	// THE A KEY
-		if(WJ2==2)
+	if (e.keyCode == 65){ // THE A KEY
+		key[1]=false; 	
+		if(WJ2==2){
 			WJ2=0;
+		}
 	} 
-	if (e.keyCode == 68){
-		key[3]=false; 	// THE D KEY
-		if(WJ2==-2)
-			WJ2=0;	
+	if (e.keyCode == 68){ // THE D KEY
+		key[3]=false; 	
+		if(WJ2==-2){
+			WJ2=0;
+		}
 	} 
-	if (e.keyCode == 32){
-		key[4]=false; 	// THE BAR SPACE	
+	if (e.keyCode == 32){ // THE BAR SPACE
+		key[4]=false; 		
 	}
 	if (e.keyCode == 74){	// THE J KEY
 		key[5]=false; 
@@ -103,12 +106,11 @@ function doKeyUp(e){
 
 
 //*****************************************************************************************************************
-// MOBILE EVENTS
+// EVENTI MOBILE
 //*****************************************************************************************************************
 
 
 function doTouchstart(e){
-    console.log(e);
     if (pressed === "ButtonW"){
         key[0]=true;    // THE W KEY
     } 
@@ -123,7 +125,7 @@ function doTouchstart(e){
     } 
 	if (pressed === "ButtonEND"){
 		pressedOnMobile = true;
-        key[4]=true;    // THE BAR SPACE	
+        key[4]=true;    // THE END BUTTON	
     }
 	if (pressed === "ButtonUP"){
         key[5]=true;    // THE J KEY  
@@ -151,7 +153,7 @@ function doTouchend(e){
     } 
 	if (pressed === "ButtonEND"){
 		pressed = "";
-        key[4]=false;    // THE BAR SPACE	
+        key[4]=false;    // THE END BUTTON	
     }
 	if (pressed === "ButtonUP"){
 		pressed = "";

@@ -13,49 +13,42 @@
 			verra' adattata ingrandendola, mentre se i valori sono inferiori,
 			l'immagine verra' adattata rimpicciolendola
 		-->
-		<!-- 
-		<body>         
-		<style type="text/css">
-		canvas { border: 2px solid blue; }
-		</style>
-		</body>
-		-->
 		<style>
 			body {
 				background: #131212;
 			}
-			#gamepad-display {
+			#gamepad-display {  /*serve per fare test con il gamepad*/
 				color: green;
 				padding: 30px;
 			}
 			#my_Canvas {
 				position: relative;
-				top: 10px;
+				top: 70px;
 				left: 130px;
 				margin: 10px;
 				padding: 10px;
 				background: #ffffff;
 				border: thin inset #0c0c0c;
 			}
-			.container {  /*to manage text on canvas and webgl */
+			.container {  
 				display: block;
 				width: 0%;
 				height: 80%;
 				position: relative;
 			}
-			#uiContainer { 
+			#uiContainer {  /*container testo destra*/
 				position: absolute;
 				left: 85%;
 				top: 20%;
 			}
-			#uiContainer2 { 
+			#uiContainer2 {  /* container testo sinistra*/
 				position: absolute;
-				top: 10%;
+				top: 2%;
 				right:80%;
 				color: white;
 			}
 			
-			.containerText {
+			.containerText { /*testo di destra*/
 				position: absolute; 
 				width: 240px;
 				left: 81%; 
@@ -63,7 +56,7 @@
 				color:white;
 			}
 
-			.containerText2 {
+			.containerText2 { /*testo di sinistra*/
 				position: absolute; 
 				width: 100px;
 				padding: 10px;
@@ -72,34 +65,33 @@
 				color:white;
 				font-size: 20px;
 			}
-			#ui {
+			#ui {	/*slider e colore*/
 				position: relative;
 				color:white;
 				
 				
 			}
-			#text { /*to manage text on canvas and webgl */
-				background-color: transparent;  /* needed because we setcanvas bg color to white */
+			#text { 
 				position: relative;
 				font-size: 20px;
 			}
 
-			#tex2 { /*to manage text on canvas and webgl */
-				background-color: transparent;  /* needed because we setcanvas bg color to white */
+			#tex2 { 
 				position: relative;
 			}
 		</style>
 	</head>
 	
 	<body>
+		<!-- BOTTONI PER LA MODALITA' COMPUTER-->
 		<p> </p>
 		
-		<button id = "ButtonIncreaseFOV" style = "width:100px; height: 40px; position:absolute; left: 20%; top: 10%; background-color: red; border-radius:20%;" >Increase fov</button>
-		<button id = "ButtonDecreaseFOV" style = "width:100px; height: 40px; position:absolute; left: 40%;  top: 10%; background-color: green; border-radius:20%;" >Decrease fov</button>
-		<button id = "ButtonViewRetro" style = "width:100px; height: 40px; position:absolute; left: 60%;  top: 10%; background-color:blue; border-radius:20%;" >Change camera</button>
+		<button id = "ButtonIncreaseFOV" style = "width:100px; height: 40px; position:absolute; left: 20%; top: 5%; background-color: red; border-radius:20%;" >Increase fov</button>
+		<button id = "ButtonDecreaseFOV" style = "width:100px; height: 40px; position:absolute; left: 40%;  top: 5%; background-color: green; border-radius:20%;" >Decrease fov</button>
+		<button id = "ButtonViewRetro" style = "width:100px; height: 40px; position:absolute; left: 60%;  top: 5%; background-color:blue; border-radius:20%;" >Change camera</button>
 		
 		<!-- ******************************************************************************************** -->
-		<!-- BUTTONS FOR THE MOBILE VERSION-->
+		<!-- BOTTONI PER LA MODALITA' MOBILE-->
 		
 		<button id = "ButtonW" style="font-size: 50px; user-select: none; position:absolute; left: 120px; top: 230px; background-color: aquamarine;">W </button>
 		<button id = "ButtonS" style="font-size: 50px; user-select: none; position:absolute; left: 125px; top: 430px; background-color: blueviolet;">S </button>
@@ -108,8 +100,8 @@
 		<button id = "ButtonA" style="font-size: 50px; user-select: none; position:absolute; left: 60px; top: 330px; background-color: gold;">A </button>
 		<button id = "ButtonD" style="font-size: 50px; user-select: none; position:absolute; left: 200px; top: 330px; background-color: deeppink;">D </button>
 		<button id = "ButtonEND" style="font-size: 50px; user-select: none; position:absolute; left: 150px; top: 15px; background-color: rgb(236, 250, 36);">END</button>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" >
-		<pre id="gamepad-display" ></pre>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" > 
+		
 		
 		<!-- ******************************************************************************************** -->
 		<p> </p>
@@ -119,7 +111,7 @@
 		<div id="uiContainer" width="100" height="600" > 
 			<div id="ui"> </div>
 		</div>
-		<div id="uiContainer2" width="50" height="600" > 
+		<div id="uiContainer2" width="20" height="600" > 
 			<label for="gc">Scegli una nave spaziale --></label>
             <input id='input1' type='file' onchange="gc_openFile(event)" />
 			<label for="gc2">Scegli una texture per la nave --></label>
@@ -132,10 +124,10 @@
 			<label id="text2"></label>
 		</div>	
 		<!-- ******************************************************************************************** -->
-		<!-- FS and VS for the sun light -->
+		<!-- FS and VS per la gestione di luce e ombre -->
 		<!-- ******************************************************************************************** -->
 		
-		<script id="sun-vs" type="not-javascript">
+		<script id="spot-vs" type="not-javascript">
 		attribute vec4 a_position;
 		attribute vec2 a_texcoord;
 		attribute vec3 a_normal;
@@ -181,7 +173,7 @@
   			v_surfaceToView = u_viewWorldPosition - surfaceWorldPosition;
 		}
 		</script>
-		<script id="sun-fs" type="not-javascript">
+		<script id="spot-fs" type="not-javascript">
 			precision mediump float;
 
 			// Passed in from the vertex shader.
@@ -240,6 +232,10 @@
       			texColor.a);
 			}
 		</script>
+
+		<!-- ******************************************************************************************** -->
+		<!-- FS and VS for per la piattaforma di salvataggio non illuminata -->
+		<!-- ******************************************************************************************** -->
 		
 		<script  id="platform-vs" type="x-shader/x-vertex">
 			attribute vec4 a_position;
@@ -263,7 +259,7 @@
 		</script>
 		
 		<!-- ******************************************************************************************** -->
-		<!-- FS and VS for the world that is not affected by the light -->
+		<!-- FS and VS for per il mondo che non è illuminato -->
 		<!-- ******************************************************************************************** -->
 		
 		<script id="world-vs" type="not-javascript">
@@ -324,7 +320,7 @@
 		<script>
 			
 			//*****************************************************************************************************************
-			var flag=0		
+				
 			var canvas = document.getElementById('my_Canvas');
 			var gl = canvas.getContext('webgl');
 			if (!gl) {
@@ -335,28 +331,29 @@
 			var ext = gl.getExtension('WEBGL_depth_texture');
 			if (!ext) {
 			  console.log("NON SUPPORTA WEBGL_depth_texture");  // eslint-disable-line
-			  }
+			}
 			
 			let string = "Ci troviamo in mezzo ad un campo di asteroidi: trova l'area di salvataggio,"+
-				" raggiungila e quando diventera' verde, vinci il gioco!";
+			" raggiungila e quando diventera' verde, vinci il gioco!";
 			
 			document.getElementById('text').innerHTML = string;
 
 			let string2 = "W=avanti" + "\n"+ "S=indietro"+ "\n"+ "A=sinistra"+ "\n"+ "D=destra"+"\n"
-			+ "J=alzati"+ "\n"+ "K=abbassati" + "\n"+"SPAZIO=fine gioco";
+			+ "J=alzati"+ "\n"+ "K=abbassati" + "\n"+"SPAZIO=fine missione";
 			
 			document.getElementById('text2').innerHTML = string2;
 			
 			//*****************************************************************************************************************
 			
-			let{o1,o2,o3}=setGeometries(gl);
-			var c_a=o1;
-			var c_m=o2;
-			var c_b=o3;
+			let{o1,o2,o3,o4}=setGeometries(gl); /* centri originali degli oggetti*/
+			var c_a=o1; //centro asteroide
+			var c_m=o2; //centro mf
+			var c_b=o3; //centro boss
+			var c_f=o4; //centro fighter
 			
 			
 
-			var programInfo_sun = webglUtils.createProgramInfo(gl, ["sun-vs", "sun-fs"]);
+			var programInfo_spot = webglUtils.createProgramInfo(gl, ["spot-vs", "spot-fs"]);
 			var programInfo_platform = webglUtils.createProgramInfo(gl, ["platform-vs", "platform-fs"]);
 			var programInfo_world = webglUtils.createProgramInfo(gl, ["world-vs", "world-fs"]);
 			
@@ -419,7 +416,7 @@
 				
 					
 			}
-			else { //i'm in the mobile version
+			else { 
 				document.getElementById("my_Canvas").style.height = "250px";
 				document.getElementById("my_Canvas").style.width = "500px";
 				document.getElementById("my_Canvas").style.left = "250px";
@@ -437,13 +434,13 @@
 
 			}
 			if (screen.width === 1920 && screen.height ===1080){
-					document.getElementById("my_Canvas").style.width = "1400px";
-					document.getElementById("container_text").style.left = "550px";
-					document.getElementById("container_text2").style.right = "100px";
-				}
+				document.getElementById("my_Canvas").style.width = "1400px";
+				document.getElementById("container_text").style.left = "550px";
+				document.getElementById("container_text2").style.right = "100px";
+			}
 
 			// -----------------------------------------------------------------
-			// actions for mouse, keyboard and mobile
+			// azioni per mouse, tastiera, gamepad e touch
 			var drag;
 			
 			document.getElementById("ButtonIncreaseFOV").onclick = function(){settings.fov  *= 1.1;};
@@ -478,22 +475,20 @@
 			window.addEventListener("gamepaddisconnected", function(e) {
   				console.log("Gamepad disconnected from index %d: %s",
     			e.gamepad.index, e.gamepad.id);
-				flag=0;
 			});
 			
 			
 			//*****************************************************************************************************************
 			// DRAWING
-			
-			var doneSomething=false; 
-			var nstep=0; 
+		
 			var timeNow=0;
+			var nstep=0; 
 
 			const PHYS_SAMPLING_STEP=20; 	// numero di millisec che un passo di fisica simula
-			
+			var doneSomething=false;
 			ShipInit(); 
 			areaInit();
-			update(); // start animation
+			update(); // per l'animazione
 			window.requestAnimationFrame(update);
 
 		</script>
