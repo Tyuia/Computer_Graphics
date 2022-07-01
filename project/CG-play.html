@@ -48,6 +48,12 @@
 				left: 85%;
 				top: 20%;
 			}
+			#uiContainer2 { 
+				position: absolute;
+				top: 10%;
+				right:80%;
+				color: white;
+			}
 			
 			.containerText {
 				position: absolute; 
@@ -112,6 +118,12 @@
 		</div>
 		<div id="uiContainer" width="100" height="600" > 
 			<div id="ui"> </div>
+		</div>
+		<div id="uiContainer2" width="50" height="600" > 
+			<label for="gc">Scegli una nave spaziale --></label>
+            <input id='input1' type='file' onchange="gc_openFile(event)" />
+			<label for="gc2">Scegli una texture per la nave --></label>
+            <input id='input2' type='file' onchange="gc_openFile2(event)" />
 		</div>
 		<div class="containerText" id="container_text">
 			<label id="text"></label>
@@ -337,10 +349,11 @@
 			
 			//*****************************************************************************************************************
 			
-			let{xc,yc,zc,xc2,yc2,zc2,xc3,yc3,zc3}=setGeometries(gl);
-			var c_a=[xc,yc,zc];
-			var c_m=[xc2,yc2,zc2];
-			var c_b=[xc3,yc3,zc3];
+			let{o1,o2,o3}=setGeometries(gl);
+			var c_a=o1;
+			var c_m=o2;
+			var c_b=o3;
+			
 			
 
 			var programInfo_sun = webglUtils.createProgramInfo(gl, ["sun-vs", "sun-fs"]);

@@ -510,8 +510,6 @@ function drawShip (programInfo) {
 	}
 	objToDraw.uniforms.u_world = matrix_ship;
 	
-	
-	
 	webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw.bufferInfo);
 	webglUtils.setUniforms(programInfo, objToDraw.uniforms);
 	webglUtils.drawBufferInfo(gl, objToDraw.bufferInfo);
