@@ -32,7 +32,8 @@ var mouseMove=function(e) {
 //*****************************************************************************************************************
 // KEYBOARD EVENTS
 //*****************************************************************************************************************
-
+var WJ=0;
+var WJ2=0;
 function doKeyDown(e){
 	if (e.keyCode == 87){
 		key[0]=true; 	// THE W KEY
@@ -42,9 +43,11 @@ function doKeyDown(e){
 	} 
 	if (e.keyCode == 65){
 		key[1]=true; 	// THE A KEY	
+		WJ2=2;
 	} 
 	if (e.keyCode == 68){
 		key[3]=true; 	// THE D KEY
+		WJ2=-2;
 	} 
 	if (e.keyCode == 32){
 		key[4]=true; 	// THE BAR SPACE	
@@ -53,31 +56,48 @@ function doKeyDown(e){
 		key[5]=true; 	// THE J KEY	
 	} 
 	if (e.keyCode == 75){
-		key[6]=true; 	// THE K KEY	
-	} 
+		key[6]=true; // THE K KEY
+	}		
+	if(key[0]==true && key[5]==true)
+		WJ=1;
+	if(key[0]==true && key[6]==true)
+		WJ=-1;
 }
 
 function doKeyUp(e){
-	if (e.keyCode == 87){
-		key[0]=false; 	// THE W KEY
+	if (e.keyCode == 87){  // THE W KEY
+		key[0]=false; 
+		if(WJ==1 || WJ==-1){
+			WJ=0;
+		}
 	} 
 	if (e.keyCode == 83){
 		key[2]=false; 	// THE S KEY	
 	} 
 	if (e.keyCode == 65){
 		key[1]=false; 	// THE A KEY
+		if(WJ2==2)
+			WJ2=0;
 	} 
 	if (e.keyCode == 68){
-		key[3]=false; 	// THE D KEY	
+		key[3]=false; 	// THE D KEY
+		if(WJ2==-2)
+			WJ2=0;	
 	} 
 	if (e.keyCode == 32){
 		key[4]=false; 	// THE BAR SPACE	
 	}
-	if (e.keyCode == 74){
-		key[5]=false; 	// THE J KEY	
+	if (e.keyCode == 74){	// THE J KEY
+		key[5]=false; 
+		if(WJ==1){
+			WJ=-0;
+		}	
 	} 
-	if (e.keyCode == 75){
-		key[6]=false; 	// THE K KEY	
+	if (e.keyCode == 75){ // THE K KEY	
+		key[6]=false;
+		if(WJ==-1){
+			WJ=0;
+		}	 	
 	} 
 }
 

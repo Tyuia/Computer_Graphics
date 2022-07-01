@@ -32,10 +32,10 @@ function ShipDoStep(){
 	if (key[3]) sterzo-=velSterzo;
 	sterzo*=velRitornoSterzo; // ritorno a volante fermo
 
-	if (key[0])vzm-=accMax;
-	if (key[5])	vym+=accMax; // accelerazione in avanti
-	if (key[2]) vzm+=accMax;
-	if (key[6])	vym-=accMax; // accelerazione indietro
+	if (key[0])vzm-=accMax; // accelerazione in avanti
+	if (key[5])	vym+=accMax+0.01; 
+	if (key[2]) vzm+=accMax;	// accelerazione indietro
+	if (key[6])	vym-=accMax+0.01; 
 	
 
 	// attriti (semplificando)
@@ -120,7 +120,7 @@ function ShipInit(){
 	// <<1 = attrito grande
 	attritoZ = 0.991;  	// piccolo attrito sulla Z (nel senso di rotolamento delle ruote)
 	attritoX = 0.4;  	// grande attrito sulla X (per non fare slittare la macchina)
-	attritoY = 1;  	// attrito sulla y nullo
+	attritoY = 0.991;  
 
 	
 	

@@ -71,7 +71,7 @@ function setObjsToDraw() {
 			uniforms: {
 				u_colorMult: [0.5, 0.5, 0.5, 1],
 				u_texture: textures[1],
-				u_world: m4.scale(m4.translation(20, -100, 20), 5, 7, 5),
+				u_world: m4.zRotate(m4.scale(m4.translation(20, -100, 20), 15, 5, 5),degToRad(90)),
 			},
 		},
 
@@ -81,7 +81,7 @@ function setObjsToDraw() {
 			uniforms: {
 				u_colorMult: [0.5, 0.5, 0.5, 1],
 				u_texture: textures[1],
-				u_world: m4.scale(m4.translation(0, -100, 20), 5, 2, 5),
+				u_world: m4.zRotate(m4.scale(m4.translation(0, -100, 20), 5, 15, 5),degToRad(90)),
 			},
 		},
 
@@ -91,7 +91,7 @@ function setObjsToDraw() {
 			uniforms: {
 				u_colorMult: [0.5, 0.5, 0.5, 1],
 				u_texture: textures[1],
-				u_world: m4.scale(m4.translation(250, -250, 300), 8, 8, 8),
+				u_world: m4.zRotate(m4.scale(m4.translation(250, -250, 300), 5, 5, 15), degToRad(90)),
 			},
 		},
 
@@ -101,7 +101,7 @@ function setObjsToDraw() {
 			uniforms: {
 				u_colorMult: [0.5, 0.5, 0.5, 1],
 				u_texture: textures[1],
-				u_world: m4.scale(m4.translation(250, 200, 20), 5, 5, 5),
+				u_world: m4.zRotate(m4.scale(m4.translation(250, 200, 20), 15, 15, 15),degToRad(90)),
 			},
 		},
 

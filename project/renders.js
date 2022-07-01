@@ -18,6 +18,11 @@ Now they're no longer necessary
 */
 
 //ORDINE CORRETTO DI APPLICAZIONE DELLE TRASFORMAZIONI DELLE MATRICI: traslate, rotate, scale
+var matrix_ship
+var angle=0;
+var angle2=0;
+
+
 
 const gamepadDisplay = document.getElementById("gamepad-display");
 function update(time){
@@ -232,9 +237,9 @@ function drawENDArea() {
 			u_world: matrix,
 		});
 		
-		if (insideArea) //cambia colore in verde
+		if (insideArea) //cambia colore in blu
 			webglUtils.setUniforms(programInfo, {
-				u_color: [0,1,0,1],
+				u_color: [0,0,1,1],
 			});
 		
 		webglUtils.drawBufferInfo(gl, objToDraw.bufferInfo);	
@@ -245,7 +250,6 @@ function drawENDArea() {
 
 
 function drawAsteroids(programInfo) {
-	console.log(r);
 	if(r!=0){
 	var objToDraw1 = getObjToDraw(objectsToDraw, "asteroid1");
 	webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw1.bufferInfo);
@@ -452,7 +456,8 @@ function drawFloor(programInfo) {
 
 
 function drawShip (programInfo) {
-	
+	var max=15;
+	var max2=35;
 	var objToDraw = getObjToDraw(objectsToDraw, "mf");
 	
 	matrix_ship = m4.identity(); 
@@ -460,6 +465,49 @@ function drawShip (programInfo) {
 	matrix_ship = m4.translate(matrix_ship,px,py,pz);
 	matrix_ship = m4.yRotate(matrix_ship, degToRad(180));
 	matrix_ship = m4.yRotate(matrix_ship, degToRad(facing));
+	if(WJ==0 && angle > 0){		
+		angle=angle-0.1;
+		matrix_ship = m4.xRotate(matrix_ship, degToRad(angle));
+		//console.log(angle);
+
+	}
+	if(WJ==0 && angle < 0){		
+		angle=angle+0.1;
+		matrix_ship = m4.xRotate(matrix_ship, degToRad(angle));
+
+	}
+	if(WJ2==0 && angle2 > 0){		
+		angle2=angle2-0.5;
+		matrix_ship = m4.zRotate(matrix_ship, degToRad(angle2));
+		//console.log(angle);
+
+	}
+	if(WJ2==0 && angle2 < 0){		
+		angle2=angle2+0.5;
+		matrix_ship = m4.zRotate(matrix_ship, degToRad(angle2));
+
+	}
+	if(WJ==1){
+		if(angle >=-max)
+			angle=angle-0.1;
+		matrix_ship = m4.xRotate(matrix_ship, degToRad(angle));
+
+	}
+	if(WJ==-1){
+		if(angle <=max)
+			angle=angle+0.1;
+		matrix_ship = m4.xRotate(matrix_ship, degToRad(angle));
+	}
+	if(WJ2==2){
+		if(angle2 >=-max2)
+			angle2=angle2-0.5;
+		matrix_ship = m4.zRotate(matrix_ship, degToRad(angle2));
+	}
+	if(WJ2==-2){
+		if(angle2 <=max2)
+			angle2=angle2+0.5;
+		matrix_ship = m4.zRotate(matrix_ship, degToRad(angle2));
+	}
 	objToDraw.uniforms.u_world = matrix_ship;
 	
 	

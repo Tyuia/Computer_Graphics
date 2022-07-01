@@ -421,7 +421,13 @@
 				document.getElementById("ButtonDecreaseFOV").style.visibility = "hidden";
 				document.getElementById("ButtonViewRetro").style.visibility = "hidden";
 				bias = -0.01 //su mobile lo metto diverso, se no viene tutto nero
+
 			}
+			if (screen.width === 1920 && screen.height ===1080){
+					document.getElementById("my_Canvas").style.width = "1400px";
+					document.getElementById("container_text").style.left = "550px";
+					document.getElementById("container_text2").style.right = "100px";
+				}
 
 			// -----------------------------------------------------------------
 			// actions for mouse, keyboard and mobile

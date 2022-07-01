@@ -25,7 +25,7 @@ function ENDGame() {
 		var c_m_t=[c_m[0]+objectsToDraw[l+7].uniforms.u_world[12], c_m[1]+objectsToDraw[l+7].uniforms.u_world[13],c_m[2]+objectsToDraw[l+7].uniforms.u_world[14]];
 		for(i=l;i<l+4;i++){
 		var c_b_t=[c_b[0]+objectsToDraw[i].uniforms.u_world[12], c_m[1]+objectsToDraw[i].uniforms.u_world[13],c_m[2]+objectsToDraw[i].uniforms.u_world[14]];
-		if(Math.sqrt(Math.pow((c_m_t[0]-c_b_t[0]),2)+Math.pow((c_m_t[1]-c_b_t[1]),2)+Math.pow((c_m_t[2]-c_b_t[2]),2)) < 40){
+		if(Math.sqrt(Math.pow((c_m_t[0]-c_b_t[0]),2)+Math.pow((c_m_t[1]-c_b_t[1]),2)+Math.pow((c_m_t[2]-c_b_t[2]),2)) < 65){
 			let string; 
 			string = "HAI PERSO!";
 			document.getElementById('text').innerHTML = string;
