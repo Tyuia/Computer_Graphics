@@ -94,7 +94,7 @@ function update(time){
 	}
 	if(nstep*PHYS_SAMPLING_STEP <= timeNow){ //skippa il frame se passa troppo poco tempo
 		timer++;
-		if(timer>=1000){
+		if(timer>=500){
 			GameOver();
 		}
 		ENDGame();

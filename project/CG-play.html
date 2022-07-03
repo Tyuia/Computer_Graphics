@@ -39,7 +39,7 @@
 			#uiContainer {  /*container testo destra*/
 				position: absolute;
 				left: 85%;
-				top: 20%;
+				top: 10%;
 			}
 			#uiContainer2 {  /* container testo sinistra*/
 				position: absolute;
@@ -52,7 +52,7 @@
 				position: absolute; 
 				width: 240px;
 				left: 81%; 
-				top: 90%;
+				top: 75%;
 				color:white;
 			}
 
@@ -61,7 +61,7 @@
 				width: 100px;
 				padding: 10px;
 				left: 2%; 
-				top: 80%;
+				top: 60%;
 				color:white;
 				font-size: 20px;
 			}
@@ -106,7 +106,7 @@
 		<!-- ******************************************************************************************** -->
 		<p> </p>
 		<div class="container" id="containerGame"> 
-			<canvas width="900" height="600" id="my_Canvas"></canvas>
+			<canvas width="900" height="500" id="my_Canvas"></canvas>
 		</div>
 		<div id="uiContainer" width="100" height="600" > 
 			<div id="ui"> </div>
@@ -419,33 +419,30 @@
 			}
 			else { 
 				document.getElementById("my_Canvas").style.height = "250px";
-				document.getElementById("my_Canvas").style.width = "500px";
-				document.getElementById("my_Canvas").style.left = "250px";
+				document.getElementById("my_Canvas").style.width = "460px";
+				document.getElementById("my_Canvas").style.left = "290px";
 				document.getElementById("my_Canvas").style.top = "40px";
 				document.getElementById("container_text").style.top = "5px";
 				document.getElementById("container_text").style.left = "400px";
 				document.getElementById("container_text").style.width = "500px";
-				document.getElementById("text").style.fontSize = "15px";
-				document.getElementById("container_text2").style.top = "2px";
-				document.getElementById("container_text2").style.left = "150px";
-				document.getElementById("container_text2").style.width = "100px";
-				document.getElementById("container_text2").style.fontSize = "15px";
-				document.getElementById("ButtonW").style.fontSize = "20px";
-				document.getElementById("ButtonW").style.left = "190px";
+				document.getElementById("text").style.fontSize = "13px";
+				document.getElementById("ButtonW").style.fontSize = "15px";
+				document.getElementById("ButtonW").style.left = "245px";
 				document.getElementById("ButtonW").style.top = "200px";
-				document.getElementById("ButtonEND").style.fontSize = "20px";
-				document.getElementById("ButtonA").style.fontSize = "20px";
-				document.getElementById("ButtonA").style.top = "250px";
-				document.getElementById("ButtonA").style.left = "150px";
-				document.getElementById("ButtonS").style.fontSize = "20px";
-				document.getElementById("ButtonS").style.left = "190px";
-				document.getElementById("ButtonS").style.top = "300px";
-				document.getElementById("ButtonD").style.fontSize = "20px";
-				document.getElementById("ButtonD").style.left = "230px";
-				document.getElementById("ButtonD").style.top = "250px";
+				document.getElementById("ButtonEND").style.fontSize = "15px";
 				document.getElementById("ButtonEND").style.left = "300px";
-				document.getElementById("ButtonUP").style.fontSize = "20px";
-				document.getElementById("ButtonDOWN").style.fontSize = "20px";
+				document.getElementById("ButtonA").style.fontSize = "15px";
+				document.getElementById("ButtonA").style.top = "250px";
+				document.getElementById("ButtonA").style.left = "210px";
+				document.getElementById("ButtonS").style.fontSize = "15px";
+				document.getElementById("ButtonS").style.left = "245px";
+				document.getElementById("ButtonS").style.top = "300px";
+				document.getElementById("ButtonD").style.fontSize = "15px";
+				document.getElementById("ButtonD").style.left = "280px";
+				document.getElementById("ButtonD").style.top = "250px";
+				document.getElementById("ButtonUP").style.fontSize = "15px";
+				document.getElementById("ButtonDOWN").style.fontSize = "15px";
+				document.getElementById("container_text2").style.visibility = "hidden";
 				document.getElementById("uiContainer2").style.visibility = "hidden";
 				document.getElementById("ButtonIncreaseFOV").style.visibility = "hidden";
 				document.getElementById("ButtonDecreaseFOV").style.visibility = "hidden";
