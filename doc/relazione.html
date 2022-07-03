@@ -1,0 +1,294 @@
+<!-- Annamaria Dal Bo -->
+
+<!doctype html>
+<html>
+	<head>
+		<title>CG-play</title>
+		<style>
+			h1 {position: relative;
+				text-align: center;
+				color: rgb(34, 206, 236);
+				font-size: 50px;
+			}
+			 h2, h3 {
+				position: relative;
+				text-align: center;
+                color: white;
+			}
+			p, ul, li {
+				margin-left: 20px;
+				margin-right: 20px;
+				font-size: 20px;
+                color: white;
+			}
+			body {
+			  background: url(profondo-spazio.jpg) no-repeat center center fixed;
+              -moz-background-size: cover;
+              -webkit-background-size: cover;
+              -o-background-size: cover;
+              background-size: cover;
+			}
+			div {
+				width:100%;
+				display: flex;
+				justify-content: center;
+			}
+			img {
+				margin: 5px;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<h1>CG-PLAY</h1>
+		<h2>Progetto per il corso di Computer Graphics</h2>
+		<h3>Realizzato da Annamaria Dal Bo  matricola 973860 di Ingegneria Informatica</h3>
+		
+		<div>
+            <img src="images\Cattura10.JPG">;
+		</div>
+		
+		<br>
+		<h2>INTRODUZIONE</h2>
+		<p>Tanto tempo fa...
+            in una galassia lontana lontana...<br>
+            il pilota della Millennium Falcon, Han Solo e il suo partner Chewbecca (un Wookie alto più di due metri) sono appena
+            riusciti nella impresa di salvare la principessa Leia Organa dalle grinfie dell'impero galattico.
+            Nel tentativo di sfuggire alle navi fighters nemiche, non si sono accorti di starsi per imbattere in un campo di
+            asteroidi.<br>
+            Il loro obiettivo è riuscire ad attraversare questo campo senza subire ingenti danni e portare la principessa 
+            sul pianeta più vicino per assicurarle una maggiore protezione.
+            A loro è legato il destino della intera galassia.<br>
+            Riusciranno i nostri eroi nella loro impresa? <br>
+            Determina il loro destino.
+			<br>
+		</p>
+		<p>
+			Lo scopo del gioco  è quello di riuscire a seminare le navi imperiali e riuscire ad atterrare sani 
+            e salvi sul pianeta ospite, per poter sbarcare e completare la propria missione.
+            Tuttavia non sarà sufficiente atterrare su una qualsiasi area del pianeta.
+            Per attenersi al protocollo di atterraggio, si dovrà uscire sani e salvi dal campo di asteroidi, evitare le navi 
+            nemiche ed atterrare sulla pedana apposita. <br>
+			Non sono state imposte limitazioni di tempo ma la missione rimane comunque non banale in quanto dovremo avere a 
+            che fare con ben tre tipi di pericoli diversi: gli asteroidi normali, gli asteroidi "boss" (asteroidi più grandi 
+            e veloci) e le navi imperiali.
+		</p>
+		<br>
+		<br>
+		<h2>Ambiente</h2>
+		
+		<div>
+            <img src="images\Cattura11.JPG" height="230">;
+            <img src="images\Cattura12.JPG"height="230">;
+            <img src="images\Cattura13.JPG"height="230">;
+		</div>
+		
+		<p>
+			Per la realizzazione dell'ambiente di gioco è stato creato un cubo a cui sono state associate delle coordinate
+            texture in modo tale da poter applicare su di esso delle texture di tipo skybox.<br>
+			Questo skybox non ha dimensioni infinite, perciò c'è la possibilità che la nave possa uscire dalla area di gioco.
+			Per evitare questo problema sono state gestite le pareti del cubo come ostacoli e in modo che, quando la 
+			nave sbatte contro una di queste pareti, semplicemente si ferma e indietreggia per poter effettuare le manovre
+			di rotazione.
+		</p>
+		
+		<p>	
+			Dovendo emulare un ambiente nello spazio, ho scelto di utilizzare comunque uno skybox per dare una maggiore sfida,
+            nella impresa. In quanto non avremo a disposizione troppo spazio di manovra e gli asteroidi possono cambiare
+            direzione e cercare di venirci addosso rimbalzando dalle pareti.
+		</p>
+	
+		<p>	
+			Oltre a questo ho aggiunto anche un piano texturato per rappresentare il pianeta dove atterrare, in modo Tale
+            da rendere più verosimile l'ambiente in quanto, per non avere problemi di luci ed ombre, la skybox è stata resa
+			invulerabile agli effetti della luce.<br>
+			Per semplicità, dovendo gestire un certo numero di oggetti di scena, ho deciso di applicare a tutti gli oggetti
+            delle texture a tinta unita ed applicare invece in modo comune il materiale di default.
+		</p>
+		<br>
+		<br>
+		<h2>Illuminazione e ombre</h2>
+		
+		<div>
+            <img src="images\Cattura3.JPG">;
+		</div>
+		
+		<p>	
+			Per illuminare il mondo, è stata posta una luce sulla sommità del cubo in modo da simulare la presenza del sole.
+			Tale luce è costruita come una spot light che, colpendo gli oggetti, grazie ad una depth_texture (che sfrutta 
+			le coordinate di profondità), è in grado di determinare quali oggetti siano in ombra e quali no.<br>
+        </p>
+        <p>
+			In particolare sono anche stati scelti i parametri di determinazione del cono luminoso che colpisce gli oggetti.
+            Non solo è possibile determinare se un oggetto è illuminato oppure no ma è anche possibile editare l'intensità 
+            della luce(nei punti in cui l'oggetto è illuminato) e l'intensità dell'ombra(nei punti non illuminati).<br>
+            Il parametro del bias è stato scelto fisso, in quanto la sua variazione non portava a significative migliorie
+            nella visualizzazione dell'ombra ed anzi. Se modificato troppo le ombre non vengono visualizzate correttamente.<br>
+            Per la realizzazione mi sono ispirata al codice visto a lezione sulle spot-light, in particolare sphere_shadows_
+            spot_light.html e js.
+
+		</p>
+		<br>
+		<br>
+		<h2>Oggetti in movimento</h2>
+		
+		<div>
+            <img src="images\Cattura3.JPG"  height="250">;
+            <img src="images\Cattura4.JPG"  height="250">;
+            <img src="images\Cattura5.JPG"  height="250">;
+		</div>
+		
+		<p>	
+			All'interno del mio progetto, gli elementi statici sono davvero pochi. Infatti gli unici elementi che
+            che non sono in movimento sono: il cubo che rappresenta il mondo di gioco, la superficie del pianeta
+            e la pedana di atterraggio (anchese verrà generata randomicamente ad ogni riavvio).
+			<br><br>
+			A questo punto posso descrivere quali saranno invece gli elementi in movimento della applicazione.
+            Ci sono la nave spaziale principale (di cui parlerò meglio nella prossima sezione), gli asteroidi
+            semplici, gli asteroidi maligni e le navi imperiali nemiche(i fighters).<br>
+            Gli asteroidi sia semplici che maligni sono stati realizzati tramite Blender partendo da una base
+            sferica a cui però sono stati effettuati dei solchi piuttosto grandi per simulare appunto la forma 
+            dell'asteroide. Le navi imperiali invece sono state solo leggermente modificate da un obj scaricato
+            da internet per alleggerire il programma. <br>
+            Ad ogni asteroide semplice è stata applicata una texture unica, che combinata a delle deformazioni
+            uniche relizzate tramite le trasformazioni di scala, danno eterogeneità all'ambiente di gioco.<br>
+            Ci sono poi gli asteroidi maligni o "boss", così chiamati in quanto sono più grossi e veloci rispetto
+            gli altri e per essere maggiormente riconoscibili, sono contraddistinti da una texture comune creata
+            utilizzando l'immagine del mio volto.<br>
+            Infine ci sono le navi imperiali che hanno stessa dimensione e texture per renderle più verosimili.<br>
+            All'interno dell'ambiente di gioco non abbiamo eterogeneità solo considerando la moltitudine di oggetti
+            in scena ma anche nei loro movimenti. Infatti i fighters sono contraddistinti da dei movimenti più
+            lineari e prevedibili mentre il movimento degli asteroidi è stato realizzato in modo tale da far sembrare
+            il loro movimento più casuale e si muoveranno su tutto lo spazio 3D.<br>
+            Una parte importante di questo progetto è stata lo sviluppo della collisione tra l'oggetto principale e
+            gli oggetti in movimento.
+            Infatti la nostra nave spaziale, nel tenativo di compiere l'impresa, ha la possibilità di imbattersi in
+            un asteroide o nave imperiale e perdere una delle sue due vite (e distruggere l'oggetto che ci ha colpiti)
+            oppure perdere direttamente nello scontro contro uno dei boss di gioco. 	
+		</p>
+		<br>
+		<br>
+        <h2>L'oggetto principale</h2>
+		
+		<div>
+            <img src="images\Cattura6.JPG" height="200">;
+            <img src="images\Cattura7.JPG"  height="200">;
+            <img src="images\Cattura8.JPG"  height="200">;
+            <img src="images\Cattura9.JPG"  height="200">;
+		</div>
+		
+		<p>	
+			Per realizzare il modello della Millennium Falcon, sono partita da un modello obj disponibile sul -web
+            a cui sono state effettuate delle modifiche per lo più ai fini di rendere il modello più leggero. 
+            Abbiamo dunque disponibili tre modelli differenti di Millennium Falcon.
+            Il modello base preso dal web, un modello realizzato da me intermedio a livello di dettagli e definizione
+            e l'ultimo modello che è quello più semplificato.
+            Come texture base ho scelto di tenere una delle immagini che ci hanno maggiormente accompagnato all'interno
+            del corso...ovvero noodles.jpg.
+			<br><br>
+			Per spostarsi nell'ambiente, la nave spaziale utilizza alcune implementazioni di fisica elementare legate al moto, 
+			estrapolate dal file cg-car2.js fornitoci a lezione.<br>
+            Tuttavia non sono mancate le modifiche che ho aggiunto per poter permettere alla nave di muoversi anche in alto
+            ed in basso all'interno del nostro mondo e non rimanere unicamente vincolata al piano.
+            Oltre a ciò ho aggiunto delle rotazioni all'interno per il movimento della nave per permetterle dei movimenti
+            molto più fluidi e anche verosimili. Come una vera nave spaziale che si rispetti.<br>	
+            Noi potremo governare la nostra nave con più possibilità: infatti il programma è abilitato sia per la pressione
+            dei tasti su tastiera, sia gli eventi touch singoli per lo smartphone, sia gli eventi mouse ed infine è abilitato
+            per interoperare anche con il gamepad.
+		</p>
+		<br>
+		<br>
+		<h2>Interazione con l'interfaccia</h2>
+		
+		<p>
+			All'utente sono permesse diverse azioni, fruibili sia su pc sia su mobile.
+			Principalmente l'interfaccia si presenta con una canvas in cui si vede l'ambientazione e con cui si può 
+			interagire in diversi modi:
+		</p>	
+			<ul>
+				<li>Attraverso la tastiera</li>
+				<li>Attraverso il mouse</li>
+				<li>Attraverso il touchscreen (nel caso mobile)</li>
+                <li>Attraverso il gamepad</li>
+			</ul>
+		<h2>Versione Desktop</h2>
+		
+		<div>
+            <img src="images\Cattura.JPG">;
+		</div>
+		<p>
+			In questa versione del gioco per far muovere la nave spaziale è necessario utilizzare la tastiera nel 
+			seguente modo:
+		</p>
+		<ul>
+			<li>Tasto W: acceleratore in avanti</li>
+			<li>Tasto S: acceleratore in retromarcia</li>
+			<li>Tasto A: rotazione a sinistra dello sterzo</li>
+			<li>Tasto D: rotazione a destra dello sterzo</li>
+            <li>Tasto J: innalzamento</li>
+			<li>Tasto K: abbassamento</li>
+			<li>Barra Spaziatrice: fine gioco</li>
+		</ul>
+		<p>
+			La barra spaziatrice si può sempre premere, tuttavia la pressione del tasto avrà effetto solamente se la nave si 
+			troverà all'interno dell'area di atterraggio. 
+		</p>
+		<p>
+			In alto sono presenti tre bottoni e a destra sette slider.
+			I bottoni permettono di aumentare/diminuire il fov, mentre il bottone "Change camera" permette di vedere la 
+            nave spaziale frontalmente.<br>
+			Gli slider invece, permettono di modificare il parametro D e la posizione della luce di cui si è parlato in
+			precedenza, vedendo in tempo reale che effetto hanno le modifiche sulle ombre. 
+            E' possibile inoltre variare il parametro di shininess per vedere come cambia il riflesso della luce.
+		</p>
+		<p>
+			Per avere una visione più globale di dove si trova la Millennium Falcon, è possibile utilizzare il drag del 
+			mouse per modificare la visuale. L'utilizzo di questo tipo di funzione è temporaneo, ossia, non appena verrà 
+			rilasciato il mouse, si ritornerà alla visuale di default, che è quella che ci permette di vedere in che 
+			direzione si sta andando.
+		</p>
+        <p>
+            In alto a sinistra è possibile in modo opzionale caricare due file distinti all'interno della nostra applicazione
+            realizzando la parte forse più divertente del progetto: la personalizzazione.
+            Purchè siano all'interno delle nostre cartelle di progetto, sarà possibile caricare qualunque obj che noi vogliamo
+            e qualsiasi texture.
+            Siamo quindi liberi di utilizzare i 3 modelli di Millennium Falcon del nostro progetto e non solo e applicarle la
+            texture che più ci piace.
+        </p>
+		
+		<br>
+		<h2>Versione Mobile</h2>
+		<div>
+			<img src="images\Cattura2.JPG">;
+		</div>
+		<p>
+			Per la versione Mobile della applicazione + stato pensato un layout differente.
+            Per poter giocare correttamente il telefono dovrà essere ruotato in orizzonatale, come se fosse una console
+            da gioco. Per il layout mi sono ispirata alle forme dei tasti delle console, in particolare i 4 tasti che
+            permettono la direzionalità sul lato sinistro e i tasti che permettono le differenti azioni(nel nostro caso solo
+            alzarci ed abbassarci) sul lato destro.
+		</p>
+		<p>		
+			Per finire il gioco poi stato creato un ulteriore bottone, che sarà sempre possibile premere, ma che avrà
+			effetto solamente una volta giunti all'interno dell'area di atterraggio.
+		</p>
+        <br>
+		<br>
+		<h2>Futuri sviluppi</h2>
+		
+		<p>
+			Per sviluppi futuri non mancano le cose che si possono fare. Si potrebbe pensare per esempio di applicare
+            per ciascun oggetto di scena o classe di oggetto di scena il suo materiale personale od utilizzare texture 
+            multiple per un maggiore realismo.<br>
+            Un altro elemento che potrebbe essere aggiunto è il multitouch, in modo tale da avere movimenti più fluidi
+            anche da mobile e migliorare la esperienza di gioco.<br>
+            Un altra possibilità è quella di poter aggiungere l'azione dello sparo. Anche se si sta sviluppando su una libreria
+            grafica si può comunque di creare un modello per lo sparo (delle sferette, dei cilindri per emulare fasci di luce),
+            gestire la loro posizione e movimento(che dovrà essere molto veloce per sembrare uno sparo vero) e far reagire gli
+            oggetti di conseguenza(per esempio far sparire gli oggetti a cui si ha sparato);
+		</p>	
+
+		
+		
+	
+	</body>
