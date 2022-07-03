@@ -119,9 +119,11 @@ function doTouchstart(e){
     } 
     if (pressed === "ButtonA"){
         key[1]=true;    // THE A KEY   
+		WJ2=2;
     } 
     if (pressed === "ButtonD"){
-        key[3]=true;    // THE D KEY  
+        key[3]=true;    // THE D KEY 
+		WJ2=-2; 
     } 
 	if (pressed === "ButtonEND"){
 		pressedOnMobile = true;
@@ -132,9 +134,16 @@ function doTouchstart(e){
     }  
 	if (pressed === "ButtonDOWN"){
         key[6]=true;    // THE K KEY  
-    }  	
+    }  
+	if(key[0]==true && key[5]==true){
+		WJ=1;
+	}
+	if(key[0]==true && key[6]==true){
+		WJ=-1;
+	}	
 }
 function doTouchend(e){
+	console.log(e);
     if (pressed === "ButtonW"){
 		pressed = "";
         key[0]=false;   // THE W KEY
@@ -146,22 +155,35 @@ function doTouchend(e){
     if (pressed === "ButtonA"){
 		pressed = "";
         key[1]=false;   // THE A KEY
+		if(WJ2==2){
+			WJ2=0;
+		}
     } 
     if (pressed === "ButtonD"){
 		pressed = "";
-        key[3]=false;   // THE D KEY    
+        key[3]=false;   // THE D KEY  
+		if(WJ2==-2){
+			WJ2=0;
+		}  
     } 
 	if (pressed === "ButtonEND"){
 		pressed = "";
         key[4]=false;    // THE END BUTTON	
+		
     }
 	if (pressed === "ButtonUP"){
 		pressed = "";
-        key[5]=false;    // THE J KEY  
+        key[5]=false;    // THE J KEY 
+		if(WJ==1){
+			WJ=-0;
+		}	 
     }  
 	if (pressed === "ButtonDOWN"){
 		pressed = "";
         key[6]=false;    // THE K KEY  
+		if(WJ==-1){
+			WJ=0;
+		}	 	
     }  	
 }
 

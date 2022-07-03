@@ -5,11 +5,12 @@
 var matrix_ship //matrice di trasformazione Millennium Falcon
 var angle=0; //angolo per andare avanti e indietro
 var angle2=0; // angolo per andare a destra e sinistra
+var timer=0; //per la invulnerabilità ad inizio gioco
 // variabili globali per scelta camera
 var cambiaCamera = false; // per passare tra la camera posteriore e anteriore
 var cameraLibera = false; // drag del mouse
 
-var flags = [false, false, false, false, false, false, false, false,false,false]; //flag per il movimento degli oggetti
+var flags = [false, false, false, false, false, false, false, false, false, false, false, false, false, false,false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]; //flag per il movimento degli oggetti
 //matrici globali. 
 var lightWorldMatrix, lightProjectionMatrix, projectionMatrix, cameraMatrix;
 const gamepadDisplay = document.getElementById("gamepad-display"); //permette di vedere in tempo reale gli effetti sul gamepad
@@ -92,7 +93,10 @@ function update(time){
 		}
 	}
 	if(nstep*PHYS_SAMPLING_STEP <= timeNow){ //skippa il frame se passa troppo poco tempo
-		GameOver();
+		timer++;
+		if(timer>=1000){
+			GameOver();
+		}
 		ENDGame();
 		ShipDoStep(); 
 		nstep++; 
@@ -157,8 +161,8 @@ function render(){
 	//permette di muoversi nella scena (esempio con la drag del mouse)
 	if(cameraLibera){
 		camera = [settings.D*7*Math.sin(settings.PHI)*Math.cos(settings.THETA),
-					settings.D*7*Math.sin(settings.PHI)*Math.sin(settings.THETA),
-					settings.D*7*Math.cos(settings.PHI)];
+		settings.D*7*Math.sin(settings.PHI)*Math.sin(settings.THETA),
+		settings.D*7*Math.cos(settings.PHI)];
 	}
     cameraMatrix = m4.lookAt(camera, targetShip, settings.up);
     drawScene( projectionMatrix, cameraMatrix, textureMatrix, lightWorldMatrix, programInfo_spot);
@@ -225,234 +229,493 @@ function drawENDArea() {
 // ****************************************************************************************************************
 function drawAsteroids(programInfo) {
 	if(r!=0){ //se r==0 non lo disegna ecc per gli altri r
-	var objToDraw1 = getObjToDraw(objectsToDraw, "asteroid1");
-	webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw1.bufferInfo);
-	webglUtils.setUniforms(programInfo, objToDraw1.uniforms);
-	if (flags[0] == false ){
-		objToDraw1.uniforms.u_world[14] += 0.5;
-	}
-	if(objToDraw1.uniforms.u_world[14]>300)
-		flags[0] = true;
-	if(flags[0] == true){
-		objToDraw1.uniforms.u_world[14] -= 0.5;
-	}
-	if(objToDraw1.uniforms.u_world[14]<-300)
-		flags[0] = false;
-	webglUtils.drawBufferInfo(gl, objToDraw1.bufferInfo);
+		var objToDraw1 = getObjToDraw(objectsToDraw, "asteroid1");
+		webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw1.bufferInfo);
+		webglUtils.setUniforms(programInfo, objToDraw1.uniforms);
+		if (flags[0] == false ){
+			objToDraw1.uniforms.u_world[14] += 0.5;
+		}
+		if(objToDraw1.uniforms.u_world[14]>300){
+			flags[0] = true;
+		}
+		if(flags[0] == true){
+			objToDraw1.uniforms.u_world[14] -= 0.5;
+		}
+		if(objToDraw1.uniforms.u_world[14]<-300){
+			flags[0] = false;
+		}
+		if (flags[15] == false ){
+			objToDraw1.uniforms.u_world[12] += 0.7;
+		}
+		if(objToDraw1.uniforms.u_world[12]>300){
+			flags[15] = true;
+		}
+		if(flags[15] == true){
+			objToDraw1.uniforms.u_world[12] -= 0.6;
+		}
+		if(objToDraw1.uniforms.u_world[12]<-300){
+			flags[15] = false;
+		}
+		if ( flags[14] == false){
+			objToDraw1.uniforms.u_world[13] += 0.8;
+		}
+		if(objToDraw1.uniforms.u_world[13]>400){
+			flags[14] = true;
+		}
+		if(flags[14] == true){
+			objToDraw1.uniforms.u_world[13] -= 0.2;
+		}
+		if(objToDraw1.uniforms.u_world[13]<-300){
+			flags[14] = false;
+		}
+		webglUtils.drawBufferInfo(gl, objToDraw1.bufferInfo);
 	}
 	if(r!=1){
-	var objToDraw2 = getObjToDraw(objectsToDraw, "asteroid2");
-	webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw2.bufferInfo);
-	webglUtils.setUniforms(programInfo, objToDraw2.uniforms);
-	if ( flags[1] == false){
-		objToDraw2.uniforms.u_world[13] += 0.5;
-	}
-	if(objToDraw2.uniforms.u_world[13]>400)
-		flags[1] = true;
-	if(flags[1] == true){
-		objToDraw2.uniforms.u_world[13] -= 0.3;
-	}
-	if(objToDraw2.uniforms.u_world[13]<-300)
-		flags[1] = false;
-	webglUtils.drawBufferInfo(gl, objToDraw2.bufferInfo);
+		var objToDraw2 = getObjToDraw(objectsToDraw, "asteroid2");
+		webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw2.bufferInfo);
+		webglUtils.setUniforms(programInfo, objToDraw2.uniforms);
+		if ( flags[1] == false){
+			objToDraw2.uniforms.u_world[13] += 0.5;
+		}
+		if(objToDraw2.uniforms.u_world[13]>400){
+			flags[1] = true;
+		}
+		if(flags[1] == true){
+			objToDraw2.uniforms.u_world[13] -= 0.3;
+		}
+		if(objToDraw2.uniforms.u_world[13]<-300){
+			flags[1] = false;
+		}
+		if (flags[16] == false ){
+			objToDraw2.uniforms.u_world[14] += 0.6;
+		}
+		if(objToDraw2.uniforms.u_world[14]>300){
+			flags[16] = true;
+		}
+		if(flags[16] == true){
+			objToDraw2.uniforms.u_world[14] -= 0.8;
+		}
+		if(objToDraw2.uniforms.u_world[14]<-300){
+			flags[16] = false;
+		}
+		if (flags[17] == false ){
+			objToDraw2.uniforms.u_world[12] += 0.4;
+		}
+		if(objToDraw2.uniforms.u_world[12]>300){
+			flags[17] = true;
+		}
+		if(flags[17] == true){
+			objToDraw2.uniforms.u_world[12] -= 0.3;
+		}
+		if(objToDraw2.uniforms.u_world[12]<-300){
+			flags[17] = false;
+		}
+		webglUtils.drawBufferInfo(gl, objToDraw2.bufferInfo);
 	}
 	if(r!=2){
-	var objToDraw3 = getObjToDraw(objectsToDraw, "asteroid3");
-	webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw3.bufferInfo);
-	webglUtils.setUniforms(programInfo, objToDraw3.uniforms);
-	if (flags[2] == false){
-		objToDraw3.uniforms.u_world[12] += 0.3;
-	}
-	if(objToDraw3.uniforms.u_world[12]>300)
-		flags[2] = true;
-	if(flags[2] == true){
-		objToDraw3.uniforms.u_world[12] -= 0.8
-	}
-	if(objToDraw3.uniforms.u_world[12]<-300)
-		flags[2] = false;
-	webglUtils.drawBufferInfo(gl, objToDraw3.bufferInfo);
+		var objToDraw3 = getObjToDraw(objectsToDraw, "asteroid3");
+		webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw3.bufferInfo);
+		webglUtils.setUniforms(programInfo, objToDraw3.uniforms);
+		if (flags[2] == false){
+			objToDraw3.uniforms.u_world[12] += 0.3;
+		}
+		if(objToDraw3.uniforms.u_world[12]>300){
+			flags[2] = true;
+		}
+		if(flags[2] == true){
+			objToDraw3.uniforms.u_world[12] -= 0.8
+		}
+		if(objToDraw3.uniforms.u_world[12]<-300){
+			flags[2] = false;
+		}
+		if ( flags[18] == false){
+			objToDraw3.uniforms.u_world[13] += 0.9;
+		}
+		if(objToDraw3.uniforms.u_world[13]>400){
+			flags[18] = true;
+		}
+		if(flags[18] == true){
+			objToDraw3.uniforms.u_world[13] -= 0.3;
+		}
+		if(objToDraw3.uniforms.u_world[13]<-300){
+			flags[18] = false;
+		}
+		if (flags[19] == false ){
+			objToDraw3.uniforms.u_world[14] += 0.6;
+		}
+		if(objToDraw3.uniforms.u_world[14]>300){
+			flags[19] = true;
+		}
+		if(flags[19] == true){
+			objToDraw3.uniforms.u_world[14] -= 0.5;
+		}
+		if(objToDraw3.uniforms.u_world[14]<-300){
+			flags[19] = false;
+		}
+		webglUtils.drawBufferInfo(gl, objToDraw3.bufferInfo);
 	}
 	if(r!=3){
-	var objToDraw4 = getObjToDraw(objectsToDraw, "asteroid4");
-	webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw4.bufferInfo);
-	webglUtils.setUniforms(programInfo, objToDraw4.uniforms);
-	if (flags[3] == false ){
-		objToDraw4.uniforms.u_world[14] += 0.5;
-	}
-	if(objToDraw4.uniforms.u_world[14]>300)
-		flags[3] = true;
-	if(flags[3] == true){
-		objToDraw4.uniforms.u_world[14] -= 0.5;
-	}
-	if(objToDraw4.uniforms.u_world[14]<-300)
-		flags[3] = false;
-	webglUtils.drawBufferInfo(gl, objToDraw4.bufferInfo);
+		var objToDraw4 = getObjToDraw(objectsToDraw, "asteroid4");
+		webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw4.bufferInfo);
+		webglUtils.setUniforms(programInfo, objToDraw4.uniforms);
+		if (flags[3] == false ){
+			objToDraw4.uniforms.u_world[14] += 0.5;
+		}
+		if(objToDraw4.uniforms.u_world[14]>300){
+			flags[3] = true;
+		}
+		if(flags[3] == true){
+			objToDraw4.uniforms.u_world[14] -= 0.5;
+		}
+		if(objToDraw4.uniforms.u_world[14]<-300){
+			flags[3] = false;
+		}
+		if (flags[20] == false){
+			objToDraw4.uniforms.u_world[12] += 0.3;
+		}
+		if(objToDraw4.uniforms.u_world[12]>300){
+			flags[20] = true;
+		}
+		if(flags[20] == true){
+			objToDraw4.uniforms.u_world[12] -= 0.2
+		}
+		if(objToDraw4.uniforms.u_world[12]<-300){
+			flags[20] = false;
+		}
+		if ( flags[21] == false){
+			objToDraw4.uniforms.u_world[13] += 0.3;
+		}
+		if(objToDraw4.uniforms.u_world[13]>400){
+			flags[21] = true;
+		}
+		if(flags[21] == true){
+			objToDraw4.uniforms.u_world[13] -= 0.8;
+		}
+		if(objToDraw4.uniforms.u_world[13]<-300){
+			flags[21] = false;
+		}
+		webglUtils.drawBufferInfo(gl, objToDraw4.bufferInfo);
 	}
 	if(r!=4){
-	var objToDraw5 = getObjToDraw(objectsToDraw, "asteroid5");
-	webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw5.bufferInfo);
-	webglUtils.setUniforms(programInfo, objToDraw5.uniforms);
-	if ( flags[4] == false){
-		objToDraw5.uniforms.u_world[13] += 0.5;
-	}
-	if(objToDraw5.uniforms.u_world[13]>400)
-		flags[4] = true;
-	if(flags[4] == true){
-		objToDraw5.uniforms.u_world[13] -= 0.3;
-	}
-	if(objToDraw5.uniforms.u_world[13]<-300)
-		flags[4] = false;
-	webglUtils.drawBufferInfo(gl, objToDraw5.bufferInfo);
+		var objToDraw5 = getObjToDraw(objectsToDraw, "asteroid5");
+		webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw5.bufferInfo);
+		webglUtils.setUniforms(programInfo, objToDraw5.uniforms);
+		if ( flags[4] == false){
+			objToDraw5.uniforms.u_world[13] += 0.7;
+		}
+		if(objToDraw5.uniforms.u_world[13]>400){
+			flags[4] = true;
+		}
+		if(flags[4] == true){
+			objToDraw5.uniforms.u_world[13] -= 0.3;
+		}
+		if(objToDraw5.uniforms.u_world[13]<-300){
+			flags[4] = false;
+		}
+		if (flags[22] == false ){
+			objToDraw5.uniforms.u_world[14] += 0.5;
+		}
+		if(objToDraw5.uniforms.u_world[14]>300){
+			flags[22] = true;
+		}
+		if(flags[22] == true){
+			objToDraw5.uniforms.u_world[14] -= 1;
+		}
+		if(objToDraw5.uniforms.u_world[14]<-300){
+			flags[22] = false;
+		}
+		if (flags[23] == false){
+			objToDraw5.uniforms.u_world[12] += 0.3;
+		}
+		if(objToDraw5.uniforms.u_world[12]>300){
+			flags[23] = true;
+		}
+		if(flags[23] == true){
+			objToDraw5.uniforms.u_world[12] -= 0.2
+		}
+		if(objToDraw5.uniforms.u_world[12]<-300){
+			flags[23] = false;
+		}
+		webglUtils.drawBufferInfo(gl, objToDraw5.bufferInfo);
 	}
 	if(r!=5){
-	var objToDraw6 = getObjToDraw(objectsToDraw, "asteroid6");
-	webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw6.bufferInfo);
-	webglUtils.setUniforms(programInfo, objToDraw6.uniforms);
-	if (flags[5] == false){
-		objToDraw6.uniforms.u_world[12] += 0.3;
+		var objToDraw6 = getObjToDraw(objectsToDraw, "asteroid6");
+		webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw6.bufferInfo);
+		webglUtils.setUniforms(programInfo, objToDraw6.uniforms);
+		if (flags[5] == false){
+			objToDraw6.uniforms.u_world[12] += 0.3;
+		}
+		if(objToDraw6.uniforms.u_world[12]>300){
+			flags[5] = true;
+		}
+		if(flags[5] == true){
+			objToDraw6.uniforms.u_world[12] -= 0.4
+		}
+		if(objToDraw6.uniforms.u_world[12]<-300){
+			flags[5] = false;
+		}
+		if ( flags[24] == false){
+			objToDraw6.uniforms.u_world[13] += 0.2;
+		}
+		if(objToDraw6.uniforms.u_world[13]>400){
+			flags[24] = true;
+		}
+		if(flags[24] == true){
+			objToDraw6.uniforms.u_world[13] -= 0.6;
+		}
+		if(objToDraw6.uniforms.u_world[13]<-300){
+			flags[24] = false;
+		}
+		if (flags[25] == false ){
+			objToDraw6.uniforms.u_world[14] += 0.5;
+		}
+		if(objToDraw6.uniforms.u_world[14]>300){
+			flags[25] = true;
+		}
+		if(flags[25] == true){
+			objToDraw6.uniforms.u_world[14] -= 0.9;
+		}
+		if(objToDraw6.uniforms.u_world[14]<-300){
+			flags[25] = false;
+		}
+		webglUtils.drawBufferInfo(gl, objToDraw6.bufferInfo);
 	}
-	if(objToDraw6.uniforms.u_world[12]>300)
-		flags[5] = true;
-	if(flags[5] == true){
-		objToDraw6.uniforms.u_world[12] -= 0.8
-	}
-	if(objToDraw6.uniforms.u_world[12]<-300)
-		flags[5] = false;
-	webglUtils.drawBufferInfo(gl, objToDraw6.bufferInfo);
-	}
-
 	var objToDraw7 = getObjToDraw(objectsToDraw, "boss1");
 	webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw7.bufferInfo);
 	webglUtils.setUniforms(programInfo, objToDraw7.uniforms);
 	if (flags[6] == false){
-		objToDraw7.uniforms.u_world[13] += 0.8;
+		objToDraw7.uniforms.u_world[13] += 1;
 	}
-	if(objToDraw7.uniforms.u_world[13]>400)
+	if(objToDraw7.uniforms.u_world[13]>400){
 		flags[6] = true;
-	if(flags[6] == true){
-		objToDraw7.uniforms.u_world[13] -= 0.8
 	}
-	if(objToDraw7.uniforms.u_world[13]<-300)
+	if(flags[6] == true){
+		objToDraw7.uniforms.u_world[13] -= 1;
+	}
+	if(objToDraw7.uniforms.u_world[13]<-300){
 		flags[6] = false;
+	}
+	if (flags[26] == false){
+		objToDraw7.uniforms.u_world[12] += 1;
+	}
+	if(objToDraw7.uniforms.u_world[12]>300){
+		flags[26] = true;
+	}
+	if(flags[26] == true){
+		objToDraw7.uniforms.u_world[12] -= 1;
+	}
+	if(objToDraw7.uniforms.u_world[12]<-300){
+		flags[26] = false;
+	}
+	if (flags[27] == false ){
+		objToDraw7.uniforms.u_world[14] += 1;
+	}
+	if(objToDraw7.uniforms.u_world[14]>300){
+		flags[27] = true;
+	}
+	if(flags[27] == true){
+		objToDraw7.uniforms.u_world[14] -= 1;
+	}
+	if(objToDraw7.uniforms.u_world[14]<-300){
+		flags[27] = false;
+	}
 	webglUtils.drawBufferInfo(gl, objToDraw7.bufferInfo);
-
 	var objToDraw8 = getObjToDraw(objectsToDraw, "boss2");
 	webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw8.bufferInfo);
 	webglUtils.setUniforms(programInfo, objToDraw8.uniforms);
 	if (flags[7] == false){
-		objToDraw8.uniforms.u_world[12] += 0.8;
+		objToDraw8.uniforms.u_world[12] += 1;
 	}
-	if(objToDraw8.uniforms.u_world[12]>300)
+	if(objToDraw8.uniforms.u_world[12]>300){
 		flags[7] = true;
-	if(flags[7] == true){
-		objToDraw8.uniforms.u_world[12] -= 0.8
 	}
-	if(objToDraw8.uniforms.u_world[12]<-300)
+	if(flags[7] == true){
+		objToDraw8.uniforms.u_world[12] -= 1;
+	}
+	if(objToDraw8.uniforms.u_world[12]<-300){
 		flags[7] = false;
+	}
+	if (flags[28] == false){
+		objToDraw8.uniforms.u_world[13] += 1;
+	}
+	if(objToDraw8.uniforms.u_world[13]>400){
+		flags[28] = true;
+	}
+	if(flags[28] == true){
+		objToDraw8.uniforms.u_world[13] -= 1;
+	}
+	if(objToDraw8.uniforms.u_world[13]<-300){
+		flags[28] = false;
+	}
+	if (flags[29] == false ){
+		objToDraw8.uniforms.u_world[14] += 1;
+	}
+	if(objToDraw8.uniforms.u_world[14]>300){
+		flags[29] = true;
+	}
+	if(flags[29] == true){
+		objToDraw8.uniforms.u_world[14] -= 1;
+	}
+	if(objToDraw8.uniforms.u_world[14]<-300){
+		flags[29] = false;
+	}
 	webglUtils.drawBufferInfo(gl, objToDraw8.bufferInfo);
-
 	var objToDraw9 = getObjToDraw(objectsToDraw, "boss3");
 	webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw9.bufferInfo);
 	webglUtils.setUniforms(programInfo, objToDraw9.uniforms);
 	if (flags[8] == false ){
 		objToDraw9.uniforms.u_world[14] += 1;
 	}
-	if(objToDraw9.uniforms.u_world[14]>300)
+	if(objToDraw9.uniforms.u_world[14]>300){
 		flags[8] = true;
-	if(flags[8] == true){
-		objToDraw9.uniforms.u_world[14] -= 0.9;
 	}
-	if(objToDraw9.uniforms.u_world[14]<-300)
+	if(flags[8] == true){
+		objToDraw9.uniforms.u_world[14] -= 1;
+	}
+	if(objToDraw9.uniforms.u_world[14]<-300){
 		flags[8] = false;
+	}
+	if (flags[30] == false){
+		objToDraw9.uniforms.u_world[12] += 1;
+	}
+	if(objToDraw9.uniforms.u_world[12]>300){
+		flags[30] = true;
+	}
+	if(flags[30] == true){
+		objToDraw9.uniforms.u_world[12] -= 1;
+	}
+	if(objToDraw9.uniforms.u_world[12]<-300){
+		flags[30] = false;
+	}
+	if ( flags[31] == false){
+		objToDraw9.uniforms.u_world[13] += 1;
+	}
+	if(objToDraw9.uniforms.u_world[13]>400){
+		flags[31] = true;
+	}
+	if(flags[31] == true){
+		objToDraw9.uniforms.u_world[13] -= 1;
+	}
+	if(objToDraw9.uniforms.u_world[13]<-300){
+		flags[31] = false;
+	}
 	webglUtils.drawBufferInfo(gl, objToDraw9.bufferInfo);
-
 	var objToDraw10 = getObjToDraw(objectsToDraw, "boss4");
 	webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw10.bufferInfo);
 	webglUtils.setUniforms(programInfo, objToDraw10.uniforms);
 	if (flags[9] == false ){
 		objToDraw10.uniforms.u_world[14] += 1;
 	}
-	if(objToDraw10.uniforms.u_world[14]>300)
+	if(objToDraw10.uniforms.u_world[14]>300){
 		flags[9] = true;
-	if(flags[9] == true){
-		objToDraw10.uniforms.u_world[14] -= 0.9;
 	}
-	if(objToDraw9.uniforms.u_world[14]<-300)
+	if(flags[9] == true){
+		objToDraw10.uniforms.u_world[14] -= 1;
+	}
+	if(objToDraw10.uniforms.u_world[14]<-300){
 		flags[9] = false;
+	}
 	webglUtils.drawBufferInfo(gl, objToDraw10.bufferInfo);
+	if (flags[32] == false){
+		objToDraw10.uniforms.u_world[12] += 1;
+	}
+	if(objToDraw10.uniforms.u_world[12]>300){
+		flags[32] = true;
+	}
+	if(flags[32] == true){
+		objToDraw10.uniforms.u_world[12] -= 1
+	}
+	if(objToDraw10.uniforms.u_world[12]<-300){
+		flags[32] = false;
+	}
+	if ( flags[33] == false){
+		objToDraw10.uniforms.u_world[13] += 1;
+	}
+	if(objToDraw10.uniforms.u_world[13]>400){
+		flags[33] = true;
+	}
+	if(flags[33] == true){
+		objToDraw10.uniforms.u_world[13] -= 1;
+	}
+	if(objToDraw10.uniforms.u_world[13]<-300){
+		flags[33] = false;
+	}
 }
 // ****************************************************************************************************************
 // DISEGNA NAVI IMPERIALI
 // ****************************************************************************************************************
-function drawShips(programInfo) {
+function drawShips(programInfo) {	
 	if(f!=14){ //se f==14 non disegno la nave imperiale ecc per gli altri f
-	var objToDraw1 = getObjToDraw(objectsToDraw, "ship1");
-	webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw1.bufferInfo);
-	webglUtils.setUniforms(programInfo, objToDraw1.uniforms);
-	if (flags[0] == false ){
-		objToDraw1.uniforms.u_world[14] += 0.5;
-	}
-	if(objToDraw1.uniforms.u_world[14]>400){
-		flags[0] = true;
-	}
-	if(flags[0] == true)
-		objToDraw1.uniforms.u_world[14] -= 0.5;
-	if(objToDraw1.uniforms.u_world[14]<-400){
-		flags[0] = false;
-	}
-	webglUtils.drawBufferInfo(gl, objToDraw1.bufferInfo);
+		var objToDraw1 = getObjToDraw(objectsToDraw, "ship1");
+		webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw1.bufferInfo);
+		webglUtils.setUniforms(programInfo, objToDraw1.uniforms);
+		if (flags[10] == false ){
+			objToDraw1.uniforms.u_world[14] += 0.5;
+		}
+		if(objToDraw1.uniforms.u_world[14]>400){
+			flags[10] = true;
+		}
+		if(flags[10] == true){
+			objToDraw1.uniforms.u_world[14] -= 0.5;
+		}
+		if(objToDraw1.uniforms.u_world[14]<-400){
+			flags[10] = false;
+		}
+		webglUtils.drawBufferInfo(gl, objToDraw1.bufferInfo);
 	}
 	if(f!=15){
-	var objToDraw2 = getObjToDraw(objectsToDraw, "ship2");
-	webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw2.bufferInfo);
-	webglUtils.setUniforms(programInfo, objToDraw2.uniforms);
-	if ( flags[1] == false){
-		objToDraw2.uniforms.u_world[13] += 0.5;
-	}
-	if(objToDraw2.uniforms.u_world[13]>400){
-		flags[1] = true;
-		objToDraw2.uniforms.u_world= m4.yRotate(objToDraw1.uniforms.u_world, degToRad(180));
-	}
-	if(flags[1] == true){
-		objToDraw2.uniforms.u_world[13] -= 0.3;
-	}
-	if(objToDraw2.uniforms.u_world[13]<-300){
-		flags[1] = false;
-		objToDraw2.uniforms.u_world= m4.yRotate(objToDraw1.uniforms.u_world, degToRad(180));
-	}
-	webglUtils.drawBufferInfo(gl, objToDraw2.bufferInfo);
+		var objToDraw2 = getObjToDraw(objectsToDraw, "ship2");
+		webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw2.bufferInfo);
+		webglUtils.setUniforms(programInfo, objToDraw2.uniforms);
+		if (flags[11] == false){
+			objToDraw2.uniforms.u_world[13] += 0.5;
+		}
+		if(objToDraw2.uniforms.u_world[13]>400){
+			flags[11] = true;
+		}
+		if(flags[11] == true){
+			objToDraw2.uniforms.u_world[13] -= 0.3;
+		}
+		if(objToDraw2.uniforms.u_world[13]<-300){
+			flags[11] = false;
+		}
+		webglUtils.drawBufferInfo(gl, objToDraw2.bufferInfo);
 	}
 	if(f!=16){
-	var objToDraw3 = getObjToDraw(objectsToDraw, "ship3");
-	webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw3.bufferInfo);
-	webglUtils.setUniforms(programInfo, objToDraw3.uniforms);
-	if (flags[2] == false){
-		objToDraw3.uniforms.u_world[12] += 0.3;
-	}
-	if(objToDraw3.uniforms.u_world[12]>400)
-		flags[2] = true;
-	if(flags[2] == true){
-		objToDraw3.uniforms.u_world[12] -= 0.8
-	}
-	if(objToDraw3.uniforms.u_world[12]<-400)
-		flags[2] = false;
-	webglUtils.drawBufferInfo(gl, objToDraw3.bufferInfo);
+		var objToDraw3 = getObjToDraw(objectsToDraw, "ship3");
+		webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw3.bufferInfo);
+		webglUtils.setUniforms(programInfo, objToDraw3.uniforms);
+		if (flags[12] == false){
+			objToDraw3.uniforms.u_world[12] += 0.3;
+		}
+		if(objToDraw3.uniforms.u_world[12]>400){
+			flags[12] = true;
+		}
+		if(flags[12] == true){
+			objToDraw3.uniforms.u_world[12] -= 0.8
+		}
+		if(objToDraw3.uniforms.u_world[12]<-400){
+			flags[12] = false;
+		}
+		webglUtils.drawBufferInfo(gl, objToDraw3.bufferInfo);
 	}
 	if(f!=17){
-	var objToDraw4 = getObjToDraw(objectsToDraw, "ship4");
-	webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw4.bufferInfo);
-	webglUtils.setUniforms(programInfo, objToDraw4.uniforms);
-	if (flags[3] == false ){
-		objToDraw4.uniforms.u_world[14] += 0.5;
-	}
-	if(objToDraw4.uniforms.u_world[14]>400)
-		flags[3] = true;
-	if(flags[3] == true){
-		objToDraw4.uniforms.u_world[14] -= 0.5;
-	}
-	if(objToDraw4.uniforms.u_world[14]<-400)
-		flags[3] = false;
-	webglUtils.drawBufferInfo(gl, objToDraw4.bufferInfo);	
+		var objToDraw4 = getObjToDraw(objectsToDraw, "ship4");
+		webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw4.bufferInfo);
+		webglUtils.setUniforms(programInfo, objToDraw4.uniforms);
+		if (flags[13] == false ){
+			objToDraw4.uniforms.u_world[14] += 0.5;
+		}
+		if(objToDraw4.uniforms.u_world[14]>400){
+			flags[13] = true;
+		}
+		if(flags[13] == true){
+			objToDraw4.uniforms.u_world[14] -= 0.5;
+		}
+		if(objToDraw4.uniforms.u_world[14]<-400){
+			flags[13] = false;
+		}
+		webglUtils.drawBufferInfo(gl, objToDraw4.bufferInfo);	
 	}
 }
 // ****************************************************************************************************************
