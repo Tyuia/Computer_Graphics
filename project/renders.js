@@ -167,6 +167,7 @@ function render(){
     cameraMatrix = m4.lookAt(camera, targetShip, settings.up);
     drawScene( projectionMatrix, cameraMatrix, textureMatrix, lightWorldMatrix, programInfo_spot);
 	//drawFrustum();
+	//drawAxis();
 	drawWorld();
 	drawENDArea();
 }
@@ -820,13 +821,27 @@ function drawFrustum() {
 	gl.useProgram(programInfo_platform.program);
 	webglUtils.setBuffersAndAttributes(gl, programInfo_platform, cubeLinesBufferInfo);
 	const mat = m4.multiply(lightWorldMatrix, m4.inverse(lightProjectionMatrix));
-	webglUtils.setUniforms(programInfo_color, {
+	webglUtils.setUniforms(programInfo_platform, {
 		u_color: [1, 1, 1, 1], //frustum color = white
 		u_view: viewMatrix,
 		u_projection: projectionMatrix,
 		u_world: mat,
 	});
 	webglUtils.drawBufferInfo(gl, cubeLinesBufferInfo, gl.LINES);
+}
+
+function drawAxis() {
+	const viewMatrix = m4.inverse(cameraMatrix);
+	gl.useProgram(programInfo_platform.program);
+	webglUtils.setBuffersAndAttributes(gl, programInfo_platform, bufferInfo_axis);
+	const mat = matrix_ship
+	webglUtils.setUniforms(programInfo_platform, {
+		u_color:[1, 1, 1, 1],
+		u_view: viewMatrix,
+		u_projection: projectionMatrix,
+		u_world: mat,
+	});
+	webglUtils.drawBufferInfo(gl, bufferInfo_axis, gl.LINES);
 }
 
 

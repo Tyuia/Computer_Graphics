@@ -196,61 +196,15 @@ function setGeometries(gl) {
 	// ---------------------------------------------------------------------
 	//Assi
 	{
-		const verticesAxis=[0,0,0, 10,0,0, 0,0,0, 0,10,0, 0,0,0, 0,0,10];
-		const colorsAxis=[1,0,0, 1,0,0, 0,1,0, 0,1,0, 0,0,1, 0,0,1];
-
+		const verticesAxis=[0,0,0, 100,0,0, 0,0,0, 0,100,0, 0,0,0, 0,0,100];
 		const arrays_axis = {
 		   position: 	{ numComponents: 3, data: verticesAxis, },
-		   color: 		{ numComponents: 3, data: colorsAxis, },
 		};
 
 		bufferInfo_axis = webglUtils.createBufferInfoFromArrays(gl, arrays_axis);
 	}
-
-	// ---------------------------------------------------------------------
-	// cube con facce colorate
-	{
-		const vertices_cubecoloured = [
-			-1,-1,-1, 	1,-1,-1, 	1,1,-1, 	-1,1,-1, 
-			-1,-1,1, 	1,-1,1, 	1,1,1, 		-1,1,1, 
-			-1,-1,-1, 	-1,1,-1, 	-1,1,1, 	-1,-1,1,
-			1,-1,-1, 	1,1,-1, 	1,1,1, 		1,-1,1, 
-			-1,-1,-1, 	-1,-1,1, 	1,-1,1, 	1,-1,-1, 
-			-1,1,-1, 	-1,1,1, 	1,1,1, 		1,1,-1,];
-
-		const colors_cubecoloured =[
-			0.9,0.9,0.9,  0.9,0.9,0.9,  0.9,0.9,0.9,  0.9,0.9,0.9,
-			0.9,0.9,0.9,  0.9,0.9,0.9,  0.9,0.9,0.9,  0.9,0.9,0.9,
-			0.9,0.9,0.9,  0.9,0.9,0.9,  0.9,0.9,0.9,  0.9,0.9,0.9,
-			0.9,0.9,0.9,  0.9,0.9,0.9,  0.9,0.9,0.9,  0.9,0.9,0.9,
-			0.9,0.9,0.9,  0.9,0.9,0.9,  0.9,0.9,0.9,  0.9,0.9,0.9,
-			0.9,0.9,0.9,  0.9,0.9,0.9,  0.9,0.9,0.9,  0.9,0.9,0.9, 
-			];
-			
-		const indices_cubecoloured = [
-			0,1,2, 		0,2,3, 		4,5,6, 		4,6,7, 		8,9,10, 	8,10,11, 
-			12,13,14, 	12,14,15, 	16,17,18, 	16,18,19, 	20,21,22, 	20,22,23 ];
-
-		const arrays_cubecoloured = {
-		   position: 	{ numComponents: 3, data: vertices_cubecoloured, },
-		   color: 		{ numComponents: 3, data: colors_cubecoloured, },
-		   indices: 	{ numComponents: 3, data: indices_cubecoloured, },
-		};
-
-		bufferInfo_cubecoloured = webglUtils.createBufferInfoFromArrays(gl, arrays_cubecoloured);
-	}
-
-	// ---------------------------------------------------------------------
-	// cube  (contouring)
-	{
-		const arrays_cubewire = {
-		   position: 	{ numComponents: 3, data: [	-1,-1,-1, 1,-1,-1, 1,1,-1, -1,1,-1, -1,-1,1, 1,-1,1, 1,1,1, -1,1,1,], },
-		   color: 		{ numComponents: 3, data: [ 0,0,0,  0,0,0,  0,0,0,  0,0,0,	0,0,0,  0,0,0,  0,0,0,  0,0,0], },
-		   indices: 	{ numComponents: 3, data: [ 0,1, 1,2, 2,3, 3,0, 4,5, 5,6, 6,7, 7,4, 1,5, 2,6, 3,7, 0,4], },
-		};
-
-		bufferInfo_cubewire = webglUtils.createBufferInfoFromArrays(gl, arrays_cubewire);
-	}
+	
+	
 	// ---------------------------------------------------------------------
 	//FRUSTUM
 	cubeLinesBufferInfo = webglUtils.createBufferInfoFromArrays(gl, {
