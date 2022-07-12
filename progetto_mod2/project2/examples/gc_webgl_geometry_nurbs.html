@@ -20,6 +20,7 @@ import Stats from './resources/libs/stats.module.js';
 import { NURBSCurve } from './resources/curves/NURBSCurve.js';
 import { MTLLoader } from './resources/loaders/MTLLoader.js';
 import { OBJLoader } from './resources/loaders/OBJLoader.js';
+import { Lensflare, LensflareElement } from './resources/objects/Lensflare.js';
 
 import { OrbitControls } from './resources/controls/OrbitControls.js';
 
@@ -33,7 +34,7 @@ let butterflys=[], nurbscurves=[];
       var cube, nrbC;
             var npt=400;
             var group;
-var numb=80;
+var numb=60;
 let spotLight;
 //let lightHelper, shadowCameraHelper;
 let step=0;
@@ -85,6 +86,44 @@ function init() {
   spotLight.shadow.focus = 1;
   scene.add( spotLight );
 
+  // lensflares
+  const textureLoader = new THREE.TextureLoader();
+
+  const textureFlare0 = textureLoader.load( 'resources/textures/lensflare0.png' );
+  const textureFlare3 = textureLoader.load( 'resources/textures/lensflare3.png' );
+
+//addLight( 0.55, 0.9, 0.5, 5000, 10, - 1000 );
+addLight( 0.5, 0.8, 0.8, 0, 20, - 500 );
+addLight( 0.995, 0.5, 0.9, 0, 20, 500 );
+
+function addLight( h, s, l, x, y, z ) {
+
+  const light = new THREE.PointLight( 0xffffff, 1.8 );
+  light.color.setHSL( h, s, l );
+  light.position.set( x, y, z );
+  light.castShadow = true;
+  light.shadow.mapSize.width = 512;
+  light.shadow.mapSize.height = 512;
+  light.angle = Math.PI / 4;
+  light.penumbra = 0.1;
+  light.decay = 2;
+  light.distance = 200;
+  light.shadow.camera.near = 10;
+  light.shadow.camera.far = 200;
+  light.shadow.focus = 1;
+  scene.add( light );
+
+  const lensflare = new Lensflare();
+  lensflare.addElement( new LensflareElement( textureFlare0, 700, 0, light.color ) );
+  lensflare.addElement( new LensflareElement( textureFlare3, 60, 0.6 ) );
+  lensflare.addElement( new LensflareElement( textureFlare3, 70, 0.7 ) );
+  lensflare.addElement( new LensflareElement( textureFlare3, 120, 0.9 ) );
+  lensflare.addElement( new LensflareElement( textureFlare3, 70, 1 ) );
+  light.add( lensflare );
+
+}
+
+
   //lightHelper = new THREE.SpotLightHelper( spotLight );
   //scene.add( lightHelper );
 
@@ -102,7 +141,7 @@ function init() {
   let geometry = new THREE.PlaneGeometry( 2000, 2000 );
 
   let plane = new THREE.Mesh( geometry, material );
-  plane.position.set( 0, - 5, 0 );
+  plane.position.set( 0, - 20, 0 );
   plane.rotation.x = - Math.PI * 0.5;
   plane.receiveShadow = true;
   scene.add( plane );
