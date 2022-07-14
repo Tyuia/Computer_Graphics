@@ -119,11 +119,9 @@ function doTouchstart(e){
     } 
     if (pressed === "ButtonA"){
         key[1]=true;    // THE A KEY   
-		WJ2=2;
     } 
     if (pressed === "ButtonD"){
         key[3]=true;    // THE D KEY 
-		WJ2=-2; 
     } 
 	if (pressed === "ButtonEND"){
 		pressedOnMobile = true;
@@ -135,12 +133,6 @@ function doTouchstart(e){
 	if (pressed === "ButtonDOWN"){
         key[6]=true;    // THE K KEY  
     }  
-	if(key[0]==true && key[5]==true){
-		WJ=1;
-	}
-	if(key[0]==true && key[6]==true){
-		WJ=-1;
-	}	
 }
 function doTouchend(e){
 	console.log(e);

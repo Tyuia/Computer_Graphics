@@ -51,12 +51,14 @@ function update(time){
 		//gamepadDisplay.textContent = JSON.stringify(gamepadState,null,2); //stampa i valori in tempo reale del pad
 		if(gamepads[0].axes[0] >=0.98){
 			key[3]=true; 	// THE D KEY
+			WJ2=-2;
 		}
 		if(gamepads[0].axes[0] < 0.98){
 			key[3]=false; 	// THE D KEY
 		}
 		if(gamepads[0].axes[0] <=-0.98){
-			key[1]=true; 	// THE A KEY
+			key[1]=true;	// THE A KEY
+			WJ2=2; 	
 		}
 		if(gamepads[0].axes[0] >-0.98){
 			key[1]=false;	// THE A KEY
@@ -91,6 +93,13 @@ function update(time){
 		if(gamepads[0].buttons[2].pressed == false){
 			key[4]=false;	//THE LEFT BUTTON
 		}
+		if(key[0]==true && key[5]==true){
+			WJ=1;
+		}
+		if(key[0]==true && key[6]==true){
+			WJ=-1;
+		}
+		
 	}
 	if(nstep*PHYS_SAMPLING_STEP <= timeNow){ //skippa il frame se passa troppo poco tempo
 		timer++;
