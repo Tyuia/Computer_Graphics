@@ -55,6 +55,9 @@ function update(time){
 		}
 		if(gamepads[0].axes[0] < 0.98){
 			key[3]=false; 	// THE D KEY
+			if(WJ2==-2){
+				WJ2=0;
+			}  
 		}
 		if(gamepads[0].axes[0] <=-0.98){
 			key[1]=true;	// THE A KEY
@@ -62,6 +65,9 @@ function update(time){
 		}
 		if(gamepads[0].axes[0] >-0.98){
 			key[1]=false;	// THE A KEY
+			if(WJ2==2){
+				WJ2=0;
+			}
 		}
 		if(gamepads[0].axes[1] >=0.98){
 			key[2]=true; 	// THE S KEY
@@ -71,6 +77,9 @@ function update(time){
 		}
 		if(gamepads[0].axes[1] >-0.98){
 			key[0]=false;	// THE W KEY
+			if(WJ==1 || WJ==-1){
+				WJ=0;
+			}
 		}
 		if(gamepads[0].axes[1] <0.98){
 			key[2]=false; 	// THE S KEY
@@ -83,9 +92,15 @@ function update(time){
 		}
 		if(gamepads[0].axes[3] >-0.98){
 			key[5]=false;	// THE J KEY
+			if(WJ==1){
+				WJ=-0;
+			}	
 		}
 		if(gamepads[0].axes[3] <0.98){
 			key[6]=false;	// THE K KEY
+			if(WJ==-1){
+				WJ=0;
+			}	
 		}
 		if(gamepads[0].buttons[2].pressed == true){
 			key[4]=true;	//THE LEFT BUTTON

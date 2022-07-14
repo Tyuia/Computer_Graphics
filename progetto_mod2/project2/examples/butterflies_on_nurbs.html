@@ -24,6 +24,7 @@
     let targetRotation = 0; 
     let butterflys=[], nurbscurves=[];
     let targetRotationOnPointerDown = 0;
+    let windowHalfX = window.innerWidth / 2;
     let flags = [], flags2= [];
     let pointerX = 0;
     let pointerXOnPointerDown = 0;
@@ -31,7 +32,7 @@
     var npt=400;
     var group;
     var numb=40;
-    let spotLight;
+    let spotLight,light1,light2;
     //let lightHelper, shadowCameraHelper;
     let step=0;
     let gui;
@@ -51,7 +52,7 @@
       //camera
       camera = new THREE.PerspectiveCamera( 35, window.innerWidth / window.innerHeight, 1, 1000 );
       //camera.position.set( 160, 40, 10 );
-      camera.position.set( 40, 5, 10);
+      camera.position.set( 40, 5, 20);
       let cameraControls;
       //control
       cameraControls = new OrbitControls( camera, renderer.domElement );
@@ -64,44 +65,55 @@
       spotLight.position.set( 20, 20, 35 );
       spotLight.angle = Math.PI / 4;
       spotLight.penumbra = 0.1;
-      spotLight.decay = 2;
       spotLight.distance = 200;
       spotLight.castShadow = true;
       spotLight.shadow.mapSize.width = 512;
       spotLight.shadow.mapSize.height = 512;
       spotLight.shadow.camera.near = 10;
       spotLight.shadow.camera.far = 200;
-      spotLight.shadow.focus = 1;
       scene.add( spotLight );
       // lensflares
       const textureLoader = new THREE.TextureLoader();
       const textureFlare0 = textureLoader.load( 'resources/textures/lensflare0.png' );
       const textureFlare3 = textureLoader.load( 'resources/textures/lensflare3.png' );
-      addLight( 0.5, 0.8, 0.8, 0, 20, - 500 );
-      addLight( 0.995, 0.5, 0.9, 0, 20, 500 );
-      function addLight( h, s, l, x, y, z ) {
-        const light = new THREE.PointLight( 0xffffff, 1.8 );
-        light.color.setHSL( h, s, l );
-        light.position.set( x, y, z );
-        light.castShadow = true;
-        light.shadow.mapSize.width = 512;
-        light.shadow.mapSize.height = 512;
-        light.angle = Math.PI / 4;
-        light.penumbra = 0.1;
-        light.decay = 2;
-        light.distance = 200;
-        light.shadow.camera.near = 10;
-        light.shadow.camera.far = 200;
-        light.shadow.focus = 1;
-        scene.add( light );
-        const lensflare = new Lensflare();
-        lensflare.addElement( new LensflareElement( textureFlare0, 700, 0, light.color ) );
-        lensflare.addElement( new LensflareElement( textureFlare3, 60, 0.6 ) );
-        lensflare.addElement( new LensflareElement( textureFlare3, 70, 0.7 ) );
-        lensflare.addElement( new LensflareElement( textureFlare3, 120, 0.9 ) );
-        lensflare.addElement( new LensflareElement( textureFlare3, 70, 1 ) );
-        light.add( lensflare );
-      } 
+      light1 = new THREE.PointLight( 0xffffff, 1.8 );
+      light1.color.setHSL( 0.5, 0.8, 0.8 );
+      light1.position.set( 0, 20, -500 );
+      light1.castShadow = true;
+      light1.shadow.mapSize.width = 512;
+      light1.shadow.mapSize.height = 512;
+      light1.angle = Math.PI / 4;
+      light1.penumbra = 0.1;
+      light1.distance = 200;
+      light1.shadow.camera.near = 10;
+      light1.shadow.camera.far = 200;
+      scene.add( light1 );
+      const lensflare = new Lensflare();
+      lensflare.addElement( new LensflareElement( textureFlare0, 700, 0, light1.color ) );
+      lensflare.addElement( new LensflareElement( textureFlare3, 60, 0.6 ) );
+      lensflare.addElement( new LensflareElement( textureFlare3, 70, 0.7 ) );
+      lensflare.addElement( new LensflareElement( textureFlare3, 120, 0.9 ) );
+      lensflare.addElement( new LensflareElement( textureFlare3, 70, 1 ) );
+      light1.add( lensflare );
+      light2 = new THREE.PointLight( 0xffffff, 1.8 );
+      light2.color.setHSL( 0.995, 0.5, 0.9 );
+      light2.position.set( 0, 20, 500 );
+      light2.castShadow = true;
+      light2.shadow.mapSize.width = 512;
+      light2.shadow.mapSize.height = 512;
+      light2.angle = Math.PI / 4;
+      light2.penumbra = 0.1;
+      light2.distance = 200;
+      light2.shadow.camera.near = 10;
+      light2.shadow.camera.far = 200;
+      scene.add( light2 );
+      const lensflare2 = new Lensflare();
+      lensflare2.addElement( new LensflareElement( textureFlare0, 700, 0, light2.color ) );
+      lensflare2.addElement( new LensflareElement( textureFlare3, 60, 0.6 ) );
+      lensflare2.addElement( new LensflareElement( textureFlare3, 70, 0.7 ) );
+      lensflare2.addElement( new LensflareElement( textureFlare3, 120, 0.9 ) );
+      lensflare2.addElement( new LensflareElement( textureFlare3, 70, 1 ) );
+      light2.add( lensflare2 );
       //lightHelper = new THREE.SpotLightHelper( spotLight );
       //scene.add( lightHelper );
       //shadowCameraHelper = new THREE.CameraHelper( spotLight.shadow.camera );
@@ -235,6 +247,7 @@
         .setPath( 'resources/models/butterfly/' )
         .load( 'butterfly.obj', function ( object ) {
         var c=getrandomColor();
+        console.log(c);
         for(var i=0;i<object.children.length;i++){
           object.children[i].castShadow=true;
           object.children[i].scale.set(10, 10, 10);
@@ -371,11 +384,13 @@
         distance: spotLight.distance,
         angle: spotLight.angle,
         penumbra: spotLight.penumbra,
-        decay: spotLight.decay,
-        focus: spotLight.shadow.focus,
         x: spotLight.position.x,
         y: spotLight.position.y,
         z: spotLight.position.z,
+        'light1 color': light1.color.getHex(),
+        intensity: light1.intensity,
+        'light2 color': light2.color.getHex(),
+        intensity: light2.intensity,
       };
       gui.addColor( params, 'light color' ).onChange( function ( val ) {
         spotLight.color.setHex( val );
@@ -409,17 +424,25 @@
         spotLight.penumbra = val;
         render();
       } );
-      gui.add( params, 'decay', 1, 2 ).onChange( function ( val ) {
-        spotLight.decay = val;
+      gui.addColor( params, 'light1 color' ).onChange( function ( val ) {
+        light1.color.setHex( val );
         render();
       } );
-      gui.add( params, 'focus', 0, 1 ).onChange( function ( val ) {
-        spotLight.shadow.focus = val;
+      gui.add( params, 'intensity', 0, 2 ).onChange( function ( val ) {
+        light1.intensity = val;
+        render();
+      } );
+      gui.addColor( params, 'light2 color' ).onChange( function ( val ) {
+        light2.color.setHex( val );
+        render();
+      } );
+      gui.add( params, 'intensity', 0, 2 ).onChange( function ( val ) {
+        light2.intensity = val;
         render();
       } );
       gui.open();
     }
-    
+
     init();
     buildGui();
     animate();
