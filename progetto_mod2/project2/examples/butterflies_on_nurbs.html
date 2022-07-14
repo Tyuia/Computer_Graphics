@@ -131,6 +131,11 @@
       plane.rotation.x = - Math.PI * 0.5;
       plane.receiveShadow = true;
       scene.add( plane );
+      //three1
+      for(let i=0;i<15;i++){
+        createTree(scene);
+        createTree2(scene);
+      }
       group = new THREE.Group();
       scene.add( group );
       // NURBS curves
@@ -277,6 +282,52 @@
       window.addEventListener( 'resize', onWindowResize );
     }
 
+    function createTree(scene) {
+      var trunk = new THREE.BoxGeometry(3, 11, 2);
+      var leaves = new THREE.SphereGeometry(10);
+      // create the mesh
+      var trunkMesh = new THREE.Mesh(trunk, new THREE.MeshLambertMaterial({
+        color: 0x8b4513
+     }));
+      var leavesMesh = new THREE.Mesh(leaves, new THREE.MeshLambertMaterial({
+        color: 0x00ff00
+      }));
+      // position the trunk. Set y to half of height of trunk
+      var v=randomIntFromInterval(-300,300);
+      var t=randomIntFromInterval(-300,300);
+      trunkMesh.position.set(v, -15, t);
+      leavesMesh.position.set(v, -2, t);
+      trunkMesh.castShadow = true;
+      trunkMesh.receiveShadow = true;
+      leavesMesh.castShadow = true;
+      leavesMesh.receiveShadow = true;
+      scene.add(trunkMesh);
+      scene.add(leavesMesh);
+    }
+
+    function createTree2(scene) {
+      var trunk = new THREE.BoxGeometry(3, 11, 2);
+      var leaves = new THREE.ConeGeometry(5,20,32);
+      // create the mesh
+      var trunkMesh = new THREE.Mesh(trunk, new THREE.MeshLambertMaterial({
+        color: 0x8b4513
+     }));
+      var leavesMesh = new THREE.Mesh(leaves, new THREE.MeshLambertMaterial({
+        color: 0x00ff00
+      }));
+      // position the trunk. Set y to half of height of trunk
+      var v=randomIntFromInterval(-300,300);
+      var t=randomIntFromInterval(-300,300);
+      trunkMesh.position.set(v, -15, t);
+      leavesMesh.position.set(v, -2, t);
+      trunkMesh.castShadow = true;
+      trunkMesh.receiveShadow = true;
+      leavesMesh.castShadow = true;
+      leavesMesh.receiveShadow = true;
+      scene.add(trunkMesh);
+      scene.add(leavesMesh);
+    }
+  
     function onWindowResize() {
       windowHalfX = window.innerWidth / 2;
       camera.aspect = window.innerWidth / window.innerHeight;
