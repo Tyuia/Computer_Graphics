@@ -30,7 +30,6 @@
     let pointerXOnPointerDown = 0;
     var cube, nrbC;
     var npt=400;
-    var group;
     var numb=40;
     let spotLight,light1,light2;
     //let lightHelper, shadowCameraHelper;
@@ -136,8 +135,6 @@
         createTree(scene);
         createTree2(scene);
       }
-      group = new THREE.Group();
-      scene.add( group );
       // NURBS curves
       for(let u=0;u<numb/4;u++){
         const nurbsControlPoints = [];
